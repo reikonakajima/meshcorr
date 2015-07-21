@@ -1,0 +1,6 @@
+AutocorrelateGG.cpp
+GAMAObjects.cpp
+GalaxyObjects.cpp
+Mesh.cpp
+NBodySimulationData.cpp
+XCorrelateGM.cpp
