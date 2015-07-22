@@ -35,7 +35,7 @@ class GalaxyObjectsError : public MyException {
 //
 class GalaxyObject {
  public:
-  GalaxyObject(double _ra, double _dec) {ra=_ra, dec=_dec;}
+  GalaxyObject(double _ra, double _dec, double _redshift) {ra=_ra, dec=_dec, redshift=_redshift;}
   GalaxyObject() {}
 
   // RA/Dec are stored in radians
@@ -43,8 +43,11 @@ class GalaxyObject {
   double getDec() const {return dec;}
   Position<double> getRADec() const {return Position<double>(ra,dec);}
 
+  double getRedshift() const { return redshift; }
+
  protected:
   double ra, dec;
+  double redshift;
 };
 
 
@@ -56,6 +59,8 @@ class GalaxyObjectList {
   GalaxyObjectList cullByRA(double minra, double maxra);
   GalaxyObjectList cullByDec(double mindec, double maxdec);
   
+  void sortByRedshift();
+
   int size() const { return objPtrList.size(); }
   Bounds<double> getBounds() { if (!bounds) setBounds(); return bounds;}
   void setBounds();   // defines bounds

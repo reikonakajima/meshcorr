@@ -62,6 +62,20 @@ GalaxyObjectList::searchDec(list<GalaxyObject*>::iterator first, list<GalaxyObje
 }
 
 
+
+bool Compare_Redshifts(GalaxyObject* rhs, GalaxyObject* lhs) {
+  return rhs->getRedshift() < lhs->getRedshift(); // sort in increasing order
+}
+
+void
+GalaxyObjectList::sortByRedshift() {
+
+  objPtrList.sort(Compare_Redshifts);  // check?
+
+  return;
+}
+
+
 void 
 GalaxyObjectList::setBounds() {
 

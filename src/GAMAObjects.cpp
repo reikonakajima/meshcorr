@@ -13,7 +13,7 @@ GAMAObject::GAMAObject(const string buffer) {
 
   // read basic object info
   iss >> GAMAid >> groupID
-      >> GalaxyObject::ra >> GalaxyObject::dec >> redshift
+      >> GalaxyObject::ra >> GalaxyObject::dec >> GalaxyObject::redshift
       >> absMagR >> absMagRErr
       >> logMStar >> logMStarErr
       >> uminusr >> uminusrErr
@@ -69,21 +69,6 @@ GAMAObjectList::sortByGAMAId() {
   GalaxyObjectList::objPtrList.sort(Compare_GAMAID);  // not perfect, but min/max is ok
   return;
 
-}
-
-
-bool Compare_GAMA_Redshift(GalaxyObject* rhs, GalaxyObject* lhs) {
-  GAMAObject* gama_ptr_rhs = static_cast<GAMAObject*>(rhs);
-  GAMAObject* gama_ptr_lhs = static_cast<GAMAObject*>(lhs);
-  return gama_ptr_rhs->getRedshift() < gama_ptr_lhs->getRedshift(); // sort in increasing order
-}
-
-void 
-GAMAObjectList::sortByRedshift() {
-
-  GalaxyObjectList::objPtrList.sort(Compare_GAMA_Redshift);  // check?
-
-  return;
 }
 
 

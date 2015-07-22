@@ -53,8 +53,6 @@ class GAMAObject : public GalaxyObject {
   // destructor
   ~GAMAObject() {}
 
-  double getRedshift() const { return redshift; }
-
   string getGAMAId() const { return GAMAid; }
   string getGroupID() const { return groupID; }
   
@@ -73,8 +71,6 @@ class GAMAObject : public GalaxyObject {
   GAMAObject(const GAMAObject& rhs) {} // hide copy constructor
 
   // GAMA Object data
-  double redshift;
-
   string GAMAid;
   string groupID;
 
