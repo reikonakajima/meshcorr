@@ -57,7 +57,7 @@ main(int argc, char* argv[]) {
     //
     cerr << "=== testDriver ===" << endl;
     cerr << "GAMA catalog ...... " << argv[1] << endl;
-    if (argc > 1)
+    if (argc > 2)
       for (int i=2; i<argc; ++i) {
 	cerr << "             ...... " << argv[i] << endl;
       }
