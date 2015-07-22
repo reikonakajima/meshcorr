@@ -57,6 +57,10 @@ main(int argc, char* argv[]) {
     //
     cerr << "=== testDriver ===" << endl;
     cerr << "GAMA catalog ...... " << argv[1] << endl;
+    if (argc > 1)
+      for (int i=2; i<argc; ++i) {
+	cerr << "             ...... " << argv[i] << endl;
+      }
     cerr << "     count ........ " << gama_list.size() << endl;
     cerr << "     bounds ....... " << gama_list.getBounds() << endl;
 
