@@ -33,26 +33,29 @@ main(int argc, char* argv[]) {
     //
     // process arguments
     //
-    if (argc != 2) {
+    if (argc < 2) {
       cerr << usage;
       exit(2);
     }
-    int iarg = 0;
-    const string gama_filename = argv[++iarg];
-    
-    /// open gama file
-    ifstream gamaf(gama_filename.c_str());
-    if (!gamaf) 
-      throw MyException("GAMA catalog file " + gama_filename + " not found");
 
-    GAMAObjectList gama_list(gamaf);
+    // read in a series of gama files
+    GAMAObjectList gama_list;
+    for (int i_arg=1; i_arg<argc; i_arg++) {
+      const string gama_filename = argv[i_arg];
+    
+      /// open gama file
+      ifstream gamaf(gama_filename.c_str());
+      if (!gamaf) 
+	throw MyException("GAMA catalog file " + gama_filename + " not found");
+      gama_list.read(gamaf);
+    }
 
 
     //
     // diagnostic error messages
     //
     cerr << "=== testDriver ===" << endl;
-    cerr << "GAMA catalog ...... " << gama_filename << endl;
+    cerr << "GAMA catalog ...... " << argv[1] << endl;
     cerr << "     count ........ " << gama_list.size() << endl;
     cerr << "     bounds ....... " << gama_list.getBounds() << endl;
 

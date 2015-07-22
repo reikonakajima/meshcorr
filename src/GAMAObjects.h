@@ -113,6 +113,9 @@ class GAMAObjectList : public GalaxyObjectList {
   // constructor, reads input stream
   GAMAObjectList(istream& is);
 
+  // read istream (returns size of read list)
+  int read(istream& is);
+
   // get a subsample in redshift bins
   GAMAObjectList getZBinSubsample(double zmin, double zmax) const ;
   // sort by spectroscopic redshifts

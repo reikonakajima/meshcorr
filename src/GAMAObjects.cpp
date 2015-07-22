@@ -46,6 +46,16 @@ GAMAObjectList::GAMAObjectList(istream& is)
 }
 
 
+int
+GAMAObjectList::read(istream& is)
+{
+  int size_before = GalaxyObjectList::objPtrList.size();
+  string buffer;
+  while (getlineNoComment(is, buffer)) 
+    GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
+  return (GalaxyObjectList::objPtrList.size() - size_before);
+}
+
 bool Compare_GAMAID(GalaxyObject* rhs, GalaxyObject* lhs) {
   GAMAObject* gama_ptr_rhs = static_cast<GAMAObject*>(rhs);
   GAMAObject* gama_ptr_lhs = static_cast<GAMAObject*>(lhs);
