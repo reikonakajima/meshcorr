@@ -58,7 +58,8 @@ class GalaxyObjectList {
   
   int size() const { return objPtrList.size(); }
   Bounds<double> getBounds() { if (!bounds) setBounds(); return bounds;}
-  void setBounds();
+  void setBounds();   // defines bounds
+  void resetBounds(); // undefines bounds
   vector<GalaxyObject*> getVectorForm();
 
  protected:

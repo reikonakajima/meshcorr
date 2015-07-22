@@ -88,6 +88,11 @@ GalaxyObjectList::setBounds() {
 }
 
 
+void
+GalaxyObjectList::resetBounds() {
+  bounds = Bounds<double>();
+}
+
 vector<GalaxyObject*> 
 GalaxyObjectList::getVectorForm() {
 
