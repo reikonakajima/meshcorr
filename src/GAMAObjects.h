@@ -106,7 +106,7 @@ class Compare_GAMARedshift {
 //
 // GAMAObjectList: 
 //
-class GAMAObjectList : public GalaxyObjectList<GAMAObject> {
+class GAMAObjectList : public GalaxyObjectList {
  public:
   // constructor, creates empty list
   GAMAObjectList() {};
