@@ -6,6 +6,7 @@
 #include "StringStuff.h"
 #include "Bounds.h"
 #include "GAMAObjects.h"
+#include "Mesh.h"
 using std::ostringstream;
 using std::setw;
 using std::setfill;
@@ -64,6 +65,7 @@ main(int argc, char* argv[]) {
       return(9);
     }
 
+    
 
   } catch (MyException& m) {
     m.dump(cerr);

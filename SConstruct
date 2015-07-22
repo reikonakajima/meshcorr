@@ -50,6 +50,7 @@ sub_objects = '''
 	    src/utilities/.obj/StringStuff.o
 	    src/.obj/GalaxyObjects.o
 	    src/.obj/GAMAObjects.o
+	    src/.obj/Mesh.o
 	    '''.split()
 
 # build the main programs

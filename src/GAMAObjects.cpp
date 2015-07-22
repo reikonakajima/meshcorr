@@ -49,11 +49,12 @@ GAMAObjectList::GAMAObjectList(istream& is)
 int
 GAMAObjectList::read(istream& is)
 {
+  resetBounds();  // old ra/dec bounds is invalid
+
   int size_before = GalaxyObjectList::objPtrList.size();
   string buffer;
   while (getlineNoComment(is, buffer)) 
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
-  resetBounds();  // old ra/dec bounds is invalid
   return (GalaxyObjectList::objPtrList.size() - size_before);
 }
 

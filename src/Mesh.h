@@ -71,22 +71,7 @@ class Mesh {
 };
 
 
-#include "SourceObjects.h"
-template class Mesh<SourceObject*, double>;  // explicit instantiation
-#include "lensObjects.h"
-template class Mesh<LensObject*, double>;    // explicit instantiation
-#include "RedshiftObjects.h"
-template class Mesh<SDSSpzObject*, double>;  // explicit instantiation
-#include "RADecObjects.h"
-template class Mesh<RADecEntry*, double>;    // explicit instantiation
-#include "ggLensObjects.h"
-template class Mesh<SDSSpzSourceObject*, double>; // explicit instantiation
-template class Mesh<SDSSpzLensObject*, double>;   // explicit instantiation
-#include "bgCatObjects.h"
-template class Mesh<bgCatObject*, double>;     // explicit instantiation
-#include "photCatObjects.h"
-template class Mesh<photCatObject*, double>;     // explicit instantiation
-#include "SDSSLensObject.h"
-template class Mesh<SDSSLensObject*, double>;  // explicit instantiation
+#include "GalaxyObjects.h"
+template class Mesh<GalaxyObject*, double>;  // explicit instantiation
 
 #endif // MESH_H

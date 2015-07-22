@@ -25,6 +25,7 @@ for d in subdirs:
 # build the objects
 env.Object('GalaxyObjects.cpp')
 env.Object('GAMAObjects.cpp')
+env.Object('Mesh.cpp')
 
 env.Object('utilities/StringStuff.cpp')
 
