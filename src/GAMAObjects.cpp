@@ -41,7 +41,7 @@ GAMAObjectList::GAMAObjectList(istream& is)
 {
   string buffer;
   while (getlineNoComment(is, buffer)) 
-    objPtrList.push_back(new GAMAObject(buffer));
+    GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
   return;
 }
 
@@ -52,7 +52,7 @@ bool Compare_GAMA_GAMAID(GAMAObject* rhs, GAMAObject* lhs) {
 
 void 
 GAMAObjectList::sortByGAMAId() {
-  objPtrList.sort(Compare_GAMA_GAMAID);  // not perfect, but min/max is ok
+  GalaxyObjectList::objPtrList.sort(Compare_GAMA_GAMAID);  // not perfect, but min/max is ok
   return;
 
 }
@@ -65,7 +65,7 @@ bool Compare_GAMA_Redshift(GAMAObject* rhs, GAMAObject* lhs) {
 void 
 GAMAObjectList::sortByRedshift() {
 
-  objPtrList.sort(Compare_GAMA_Redshift);  // check?
+  GalaxyObjectList::objPtrList.sort(Compare_GAMA_Redshift);  // check?
 
   return;
 }
@@ -79,11 +79,11 @@ GAMAObjectList::getZBinSubsample(double zmin, double zmax) const {
 
   GAMAObjectList subsample; // initialize return list
 
-  list<GAMAObject*>::const_iterator i = objPtrList.begin();
-  for (; i != objPtrList.end(); ++i) {
+  list<GalaxyObject*>::const_iterator i = GalaxyObjectList<GAMAObject>::objPtrList.begin();
+  for (; i != GalaxyObjectList::objPtrList.end(); ++i) {
     double z = (*i)->getRedshift();
     if (z >= zmin && z < zmax)
-      subsample.objPtrList.push_back(*i);
+      subsample.GalaxyObjectList::objPtrList.push_back(*i);
   }
 
   return subsample;

@@ -106,7 +106,7 @@ class Compare_GAMARedshift {
 //
 // GAMAObjectList: 
 //
-class GAMAObjectList {
+class GAMAObjectList : public GalaxyObjectList<GAMAObject> {
  public:
   // constructor, creates empty list
   GAMAObjectList() {};
@@ -120,8 +120,6 @@ class GAMAObjectList {
   // sort by GAMA ID for matching purposes
   void sortByGAMAId();
 
- private:
-  list<GAMAObject*> objPtrList;
 };
 
 

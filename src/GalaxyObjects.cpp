@@ -11,72 +11,81 @@ bool Compare_Source_Dec(GalaxyObject* lhs, GalaxyObject* rhs) {
   return lhs->getDec() < rhs->getDec(); // sort in increasing order
 }
 
+template <class Tgalobj>
 void 
-GalaxyObjectList::sortByRA() {
-  this->sort(Compare_Source_RA);
+GalaxyObjectList<Tgalobj>::sortByRA() {
+  objPtrList.sort(Compare_Source_RA);
   return;
 }
 
+template <class Tgalobj>
 void 
-GalaxyObjectList::sortByDec() {
-  this->sort(Compare_Source_Dec);
+GalaxyObjectList<Tgalobj>::sortByDec() {
+  objPtrList.sort(Compare_Source_Dec);
   return;
 }
 
-GalaxyObjectList
-GalaxyObjectList::cullByRA(double minra, double maxra) {
-  GalaxyObjectList culledlist;
+template <class Tgalobj>
+GalaxyObjectList<Tgalobj>
+GalaxyObjectList<Tgalobj>::cullByRA(double minra, double maxra) {
+  GalaxyObjectList<Tgalobj> culledlist;
   this->sortByRA();
-  GalaxyObjectList::iterator i0 = searchRA(this->begin(), this->end(), minra);
-  GalaxyObjectList::iterator i1 = searchRA(i0, this->end(), maxra);
-  culledlist.assign(i0, i1);
+  typename list<Tgalobj*>::iterator i0 = searchRA(objPtrList.begin(), objPtrList.end(), minra);
+  typename list<Tgalobj*>::iterator i1 = searchRA(i0, objPtrList.end(), maxra);
+  culledlist.objPtrList.assign(i0, i1);
   return culledlist;
 }
 
-GalaxyObjectList
-GalaxyObjectList::cullByDec(double mindec, double maxdec) {
-  GalaxyObjectList culledlist;
+template <class Tgalobj>
+GalaxyObjectList<Tgalobj>
+GalaxyObjectList<Tgalobj>::cullByDec(double mindec, double maxdec) {
+  GalaxyObjectList<Tgalobj> culledlist;
   this->sortByDec();
-  GalaxyObjectList::iterator i0 = searchDec(this->begin(), this->end(), mindec);
-  GalaxyObjectList::iterator i1 = searchDec(i0, this->end(), maxdec);
-  culledlist.assign(i0, i1);
+  typename list<Tgalobj*>::iterator i0 = searchDec(objPtrList.begin(), objPtrList.end(), mindec);
+  typename list<Tgalobj*>::iterator i1 = searchDec(i0, objPtrList.end(), maxdec);
+  culledlist.objPtrList.assign(i0, i1);
   return culledlist;
 }
 
-GalaxyObjectList::iterator 
-GalaxyObjectList::searchRA(GalaxyObjectList::iterator first, GalaxyObjectList::iterator last, 
-			 const double ra) {
-  GalaxyObjectList::iterator i = first;
+template <class Tgalobj>
+typename list<Tgalobj*>::iterator 
+GalaxyObjectList<Tgalobj>::searchRA(typename list<Tgalobj*>::iterator first,
+				    typename list<Tgalobj*>::iterator last, 
+				    const double ra) {
+  typename list<Tgalobj*>::iterator i = first;
   while ( ra > (*i)->getRA() && i != last)
     ++i;
   return i;
 }
 
-GalaxyObjectList::iterator 
-GalaxyObjectList::searchDec(GalaxyObjectList::iterator first, GalaxyObjectList::iterator last, 
-			  const double dec) {
-  GalaxyObjectList::iterator i = first;
+template <class Tgalobj>
+typename list<Tgalobj*>::iterator 
+GalaxyObjectList<Tgalobj>::searchDec(typename list<Tgalobj*>::iterator first,
+				     typename list<Tgalobj*>::iterator last, 
+				     const double dec) {
+  typename list<Tgalobj*>::iterator i = first;
   while ( dec > (*i)->getDec() && i != last)
     ++i;
   return i;
 }
 
 
+template <class Tgalobj>
 void 
-GalaxyObjectList::setBounds() {
+GalaxyObjectList<Tgalobj>::setBounds() {
 
   double minra, maxra, mindec, maxdec;
 
   this->sortByRA();
-  GalaxyObjectList::const_iterator i = this->begin();
+  typename list<Tgalobj*>::const_iterator i = objPtrList.begin();
   minra = (*i)->getRA();
-  i = this->end();  --i;
+  i = objPtrList.end();  --i;
   maxra = (*i)->getRA();
 
   this->sortByDec();
-  i = this->begin();
+  i = objPtrList.begin();
   mindec = (*i)->getDec();
-  i = this->end();  --i;
+  i = objPtrList.end();  --i;
   maxdec = (*i)->getDec();
 
   bounds.setXMin(minra);
@@ -88,13 +97,14 @@ GalaxyObjectList::setBounds() {
 }
 
 
-vector<GalaxyObject*> 
-GalaxyObjectList::getVectorForm() {
+template <class Tgalobj>
+vector<Tgalobj*> 
+GalaxyObjectList<Tgalobj>::getVectorForm() {
 
-  vector<GalaxyObject*> vectorform;
-  vectorform.reserve(this->size());
-  GalaxyObjectList::const_iterator i = this->begin();
-  for (; i != this->end(); ++i) {
+  vector<Tgalobj*> vectorform;
+  vectorform.reserve(objPtrList.size());
+  typename list<Tgalobj*>::const_iterator i = objPtrList.begin();
+  for (; i != objPtrList.end(); ++i) {
     vectorform.push_back(*i);
   }
   return vectorform;

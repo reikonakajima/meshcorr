@@ -48,7 +48,8 @@ class GalaxyObject {
 };
 
 
-class GalaxyObjectList : public list<GalaxyObject*> {
+template <class Tgalobj>
+class GalaxyObjectList {
  public:
   GalaxyObjectList() {}  // empty list
   void sortByRA();
@@ -57,16 +58,22 @@ class GalaxyObjectList : public list<GalaxyObject*> {
   GalaxyObjectList cullByDec(double mindec, double maxdec);
   Bounds<double> getBounds() { if (!bounds) setBounds(); return bounds;}
   void setBounds();
-  vector<GalaxyObject*> getVectorForm();
- private:
+  vector<Tgalobj*> getVectorForm();
+
+ protected:
+  list<Tgalobj*> objPtrList;
   Bounds<double> bounds;
-  GalaxyObjectList::iterator searchRA(GalaxyObjectList::iterator first, 
-				      GalaxyObjectList::iterator last,
-				      const double ra);
-  GalaxyObjectList::iterator searchDec(GalaxyObjectList::iterator first, 
-				       GalaxyObjectList::iterator last,
-				       const double dec);
+  typename list<Tgalobj*>::iterator searchRA(typename list<Tgalobj*>::iterator first, 
+					     typename list<Tgalobj*>::iterator last,
+					     const double ra);
+  typename list<Tgalobj*>::iterator searchDec(typename list<Tgalobj*>::iterator first, 
+					      typename list<Tgalobj*>::iterator last,
+					      const double dec);
+
 };
+
+#include "GAMAObjects.h"
+template class GalaxyObjectList<GAMAObject>;
 
 
 #endif // GALAXYOBJECTS_H
