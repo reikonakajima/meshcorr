@@ -54,6 +54,9 @@ class GalaxyObject {
 class ComovingCoord {
  public:
   ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift);
+  double getX() { return x; }
+  double getY() { return y; }
+  double getZ() { return z; }
 
  protected:
   double x, y, z;
@@ -77,6 +80,8 @@ class GalaxyObjectList {
   vector<GalaxyObject*> getVectorForm();
 
   void setComovingCoords(Cosmology cosmo);
+  list<ComovingCoord*>::iterator comovingCoordBegin() { return coordPtrList.begin(); }
+  list<ComovingCoord*>::iterator comovingCoordEnd() { return coordPtrList.end(); }
 
  protected:
   list<GalaxyObject*> objPtrList;

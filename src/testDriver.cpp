@@ -6,6 +6,7 @@
 #include "StringStuff.h"
 #include "Bounds.h"
 #include "GAMAObjects.h"
+#include "Cosmology.h"
 #include "Mesh.h"
 using std::ostringstream;
 using std::setw;
@@ -69,7 +70,21 @@ main(int argc, char* argv[]) {
       return(9);
     }
 
-    
+    //
+    // test cosmology output
+    //
+    double Omega_m = 0.73;
+    double Omega_lambda = 0.27;
+    Cosmology cosmo(Omega_m, Omega_lambda);
+    gama_list.setComovingCoords(cosmo);
+    string out_fname = "comovingcoord3d.out";
+    cerr << "Test cosmological output in " << out_fname << endl;
+    ofstream outf(out_fname.c_str());
+    for (list<ComovingCoord*>::iterator i = gama_list.comovingCoordBegin();
+	 i != gama_list.comovingCoordEnd(); ++i) {
+      outf << (*i)->getX() << (*i)->getY() << (*i)->getZ() << endl;
+    }
+
 
   } catch (MyException& m) {
     m.dump(cerr);
