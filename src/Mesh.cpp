@@ -135,8 +135,8 @@ Mesh<Ttype, Tpos>::getNearMeshMap(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin) 
 }
 
 
-template <class Ttype, class Tpos> 
-multimap<double, int> 
+template <class Ttype, class Tpos>
+multimap<double, int>
 Mesh<Ttype, Tpos>::getNearAngleMap(Tpos ra, Tpos dec, Tpos z, Tpos thetamax, Tpos thetamin) {
   std::multimap<double, int> nbr;    // the return list
   nbr.clear();                       // clear list
@@ -144,7 +144,7 @@ Mesh<Ttype, Tpos>::getNearAngleMap(Tpos ra, Tpos dec, Tpos z, Tpos thetamax, Tpo
   Tpos angsep, cosangsep;
   Tpos cosa, sina, cosb, sinb, cosC;
   ix = int((ra - xmin)/dx);          // calculate index of point
-  iy = int((dec - ymin)/dy);              
+  iy = int((dec - ymin)/dy);
   iz = int((z - zmin)/dz);
   Tpos cosd_1 = cos((dec+thetamax)*DEGREE);
   Tpos cosd_2 = cos((dec-thetamax)*DEGREE);
@@ -163,7 +163,7 @@ Mesh<Ttype, Tpos>::getNearAngleMap(Tpos ra, Tpos dec, Tpos z, Tpos thetamax, Tpo
 	sina = sin((*dat)[p]->getY()*DEGREE);
 	cosC = cos((ra - (*dat)[p]->getX()) * DEGREE);
 	cosangsep = sina*sinb + cosa*cosb*cosC;
-	//cerr << cosangsep << "=" << sina << "*" << sinb << "+" 
+	//cerr << cosangsep << "=" << sina << "*" << sinb << "+"
 	//     << cosa << "*" << cosb << "*" << cosC << endl;
 	angsep = acos(cosangsep) / DEGREE;
 	//cerr << angsep * 3600 << endl;  // DEBUG
