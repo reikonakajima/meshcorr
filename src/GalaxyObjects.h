@@ -76,6 +76,8 @@ class GalaxyObjectList {
   void resetBounds(); // undefines bounds
   vector<GalaxyObject*> getVectorForm();
 
+  void setComovingCoords(Cosmology cosmo);
+
  protected:
   list<GalaxyObject*> objPtrList;
   list<ComovingCoord*> coordPtrList;
