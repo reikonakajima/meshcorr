@@ -5,15 +5,15 @@ using namespace std;
 
 ComovingCoord::ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift) {
 
-  double comoving_r = cosmo.Dc(redshift);  // comoving distance
+  double comoving_r = cosmo.Dc(redshift) * HubbleLengthMpc;  // comoving distance in Mpc/h (c/H0)
 
-  double rarad = ra*DEGREE;
+  double rarad = ra*DEGREE;    // convert to radian units
   double decrad = dec*DEGREE;
+  double cosdec = cos(decrad);
 
-  double sindec = sin(decrad);
-  x = comoving_r * cos(rarad) * sindec;
-  y = comoving_r * sin(rarad) * sindec;
-  z = comoving_r * cos(decrad);
+  x = comoving_r * cos(rarad) * cosdec;
+  y = comoving_r * sin(rarad) * cosdec;
+  z = comoving_r * sin(decrad);
 
   return;
 }

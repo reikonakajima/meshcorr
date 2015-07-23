@@ -2,12 +2,14 @@
 // meshDriver.cpp   : For testing the Mesh C++ module
 //
 #include <iostream>
+#include <iomanip>
 #include "Std.h"
 #include "StringStuff.h"
 #include "Bounds.h"
 #include "GAMAObjects.h"
 #include "Cosmology.h"
 #include "Mesh.h"
+using std::ios;
 using std::ostringstream;
 using std::setw;
 using std::setfill;
@@ -80,9 +82,24 @@ main(int argc, char* argv[]) {
     string out_fname = "comovingcoord3d.out";
     cerr << "Test cosmological output in " << out_fname << endl;
     ofstream outf(out_fname.c_str());
-    for (list<ComovingCoord*>::iterator i = gama_list.comovingCoordBegin();
-	 i != gama_list.comovingCoordEnd(); ++i) {
-      outf << (*i)->getX() << (*i)->getY() << (*i)->getZ() << endl;
+    list<ComovingCoord*>::iterator i = gama_list.comovingCoordBegin();
+    list<GalaxyObject*>::iterator j = gama_list.objListBegin();
+    for (; i != gama_list.comovingCoordEnd(), j != gama_list.objListEnd(); ++i, ++j) {
+      outf.setf(ios::fixed, ios::floatfield);
+      outf << setw(11) << setprecision(6)
+	   << (*j)->getRA() << " "
+	   << setw(11) << setprecision(6)
+	   << (*j)->getDec() << " "
+	   << " "
+	   << setw(5) << setprecision(3)
+	   << (*j)->getRedshift() << " "
+	   << "  "
+	   << setw(11) << setprecision(6)
+	   << (*i)->getX() << " "
+	   << setw(11) << setprecision(6)
+	   << (*i)->getY() << " "
+	   << setw(11) << setprecision(6)
+	   << (*i)->getZ() << endl;
     }
 
 

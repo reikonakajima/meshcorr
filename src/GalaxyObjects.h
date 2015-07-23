@@ -83,6 +83,9 @@ class GalaxyObjectList {
   list<ComovingCoord*>::iterator comovingCoordBegin() { return coordPtrList.begin(); }
   list<ComovingCoord*>::iterator comovingCoordEnd() { return coordPtrList.end(); }
 
+  list<GalaxyObject*>::iterator objListBegin() { return objPtrList.begin(); }
+  list<GalaxyObject*>::iterator objListEnd() { return objPtrList.end(); }
+
  protected:
   list<GalaxyObject*> objPtrList;
   list<ComovingCoord*> coordPtrList;
