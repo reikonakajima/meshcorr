@@ -7,6 +7,7 @@ import sys
 sys.path.append('/Users/reiko/2code/python/mylib')
 
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import animation
 
 """
 xyz.py
@@ -22,12 +23,25 @@ ax = fig.add_subplot(111,projection='3d')
 
 ax.scatter(x,y,z, c='r', marker='.')
 
+def init():
+    ax.scatter(x,y,z, c='r', marker=',')
+
+def animate(i):
+    ax.view_init(elev=10, azim=i)
+
 for ii in xrange(0,360,1):
-    ax.view_init(elev=10, azim=ii)
-    P.savefig("movie%s"%ii+".png")
+    ax.view_init(elev=10., azim=ii)
+    P.savefig("xyz%04d"%ii + ".png")
+
+shcommand = "ffmpeg -i xyz%04d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4"
+S.call(shcommand, shell=True)
 
 
-
+"""
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=360, interval=20, blit=True)
+anim.save('xyz.mp4', fps=30,) # extra_args=['-vcodec', 'libx264',])
+"""
+"""
 notetext = " "
 P.figtext(0.52, 0.925, notetext, fontsize='xx-small', multialignment='left', weight='bold',)
 
@@ -39,4 +53,4 @@ P.figtext(0.1, 0.93, annotatestr, fontsize='xx-small', multialignment='left',)
 figfname = sys.argv[0].replace('.py', '.png')
 P.savefig(figfname)
 P.clf()
-
+"""
