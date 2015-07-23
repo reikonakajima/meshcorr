@@ -48,6 +48,8 @@ env.Append(CPPPATH=['utilities',])
 # specify the sub-objects
 sub_objects = '''
 	    src/utilities/.obj/StringStuff.o
+	    src/utilities/.obj/Table.o
+	    src/cosmology/.obj/Cosmology.o
 	    src/.obj/GalaxyObjects.o
 	    src/.obj/GAMAObjects.o
 	    src/.obj/Mesh.o

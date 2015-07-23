@@ -51,6 +51,15 @@ class GalaxyObject {
 };
 
 
+class ComovingCoord {
+ public:
+  ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift);
+
+ protected:
+  double x, y, z;
+};
+
+
 class GalaxyObjectList {
  public:
   GalaxyObjectList() {}  // empty list
@@ -69,6 +78,7 @@ class GalaxyObjectList {
 
  protected:
   list<GalaxyObject*> objPtrList;
+  list<ComovingCoord*> coordPtrList;
 
  private:
   Bounds<double> bounds;

@@ -3,6 +3,21 @@
 using namespace std;
 
 
+ComovingCoord::ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift) {
+
+  double comoving_r = cosmo.Dc(redshift);  // comoving distance
+
+  double rarad = ra*DEGREE;
+  double decrad = dec*DEGREE;
+
+  double sindec = sin(decrad);
+  x = comoving_r * cos(rarad) * sindec;
+  y = comoving_r * sin(rarad) * sindec;
+  z = comoving_r * cos(decrad);
+
+  return;
+}
+
 
 bool Compare_Source_RA(GalaxyObject* rhs, GalaxyObject* lhs) {
   return rhs->getRA() < lhs->getRA(); // sort in increasing order
