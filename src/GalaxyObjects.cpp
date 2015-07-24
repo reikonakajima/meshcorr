@@ -128,7 +128,8 @@ GalaxyObjectList::setComovingCoords(Cosmology c) {
 
   list<GalaxyObject*>::iterator i = objPtrList.begin();
   for (; i != objPtrList.end(); ++i) {
-    coordPtrList.push_back(new ComovingCoord(c, (*i)->getRA(), (*i)->getDec(), (*i)->getRedshift()));
+    ComovingCoord* cc = new ComovingCoord(c, (*i)->getRA(), (*i)->getDec(), (*i)->getRedshift());
+    (*i)->setCoordPtr(cc);
   }
   return;
 }

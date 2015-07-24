@@ -29,6 +29,18 @@ class GalaxyObjectsError : public MyException {
 };
 
 
+class ComovingCoord {
+ public:
+  ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift);
+  double getX() { return x; }
+  double getY() { return y; }
+  double getZ() { return z; }
+
+ protected:
+  double x, y, z;
+};
+
+
 //
 // GalaxyObject class
 //   Base class for LensObject and SourceObject
@@ -45,21 +57,16 @@ class GalaxyObject {
 
   double getRedshift() const { return redshift; }
 
+  double getX() const {return coordPtr->getX();}
+  double getY() const {return coordPtr->getY();}
+  double getZ() const {return coordPtr->getZ();}
+
+  void setCoordPtr(ComovingCoord* p) { coordPtr = p; return; }
+
  protected:
   double ra, dec;
   double redshift;
-};
-
-
-class ComovingCoord {
- public:
-  ComovingCoord(Cosmology cosmo, double ra, double dec, double redshift);
-  double getX() { return x; }
-  double getY() { return y; }
-  double getZ() { return z; }
-
- protected:
-  double x, y, z;
+  mutable ComovingCoord* coordPtr;
 };
 
 
@@ -80,15 +87,12 @@ class GalaxyObjectList {
   vector<GalaxyObject*> getVectorForm();
 
   void setComovingCoords(Cosmology cosmo);
-  list<ComovingCoord*>::iterator comovingCoordBegin() { return coordPtrList.begin(); }
-  list<ComovingCoord*>::iterator comovingCoordEnd() { return coordPtrList.end(); }
 
   list<GalaxyObject*>::iterator objListBegin() { return objPtrList.begin(); }
   list<GalaxyObject*>::iterator objListEnd() { return objPtrList.end(); }
 
  protected:
   list<GalaxyObject*> objPtrList;
-  list<ComovingCoord*> coordPtrList;
 
  private:
   Bounds<double> bounds;
