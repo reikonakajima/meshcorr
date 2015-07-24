@@ -82,18 +82,19 @@ main(int argc, char* argv[]) {
     string out_fname = "comovingcoord3d.out";
     cerr << "Test cosmological output in " << out_fname << endl;
     ofstream outf(out_fname.c_str());
+    outf << "#ra          dec        redshift    x           y           z" << endl;
     list<ComovingCoord*>::iterator i = gama_list.comovingCoordBegin();
     list<GalaxyObject*>::iterator j = gama_list.objListBegin();
     for (; i != gama_list.comovingCoordEnd(), j != gama_list.objListEnd(); ++i, ++j) {
       outf.setf(ios::fixed, ios::floatfield);
       outf << setw(11) << setprecision(6)
 	   << (*j)->getRA() << " "
-	   << setw(11) << setprecision(6)
+	   << setw(10) << setprecision(6)
 	   << (*j)->getDec() << " "
 	   << " "
 	   << setw(5) << setprecision(3)
 	   << (*j)->getRedshift() << " "
-	   << "  "
+	   << "   "
 	   << setw(11) << setprecision(6)
 	   << (*i)->getX() << " "
 	   << setw(11) << setprecision(6)
