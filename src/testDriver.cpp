@@ -109,7 +109,8 @@ main(int argc, char* argv[]) {
     bool periodic = false;
     vector<GalaxyObject*> gamavector = gama_list.getVectorForm();
     double xmin, xmax, ymin, ymax, zmin, zmax;
-    gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax);
+    bool addEpsilon = false;
+    gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax, addEpsilon);
     cerr << xmin << " " << xmax << " "
 	 << ymin << " " << ymax << " "
 	 << zmin << " " << zmax << endl;

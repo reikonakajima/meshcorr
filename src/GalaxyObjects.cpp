@@ -151,7 +151,8 @@ GalaxyObjectList::getVectorForm() {
 void
 GalaxyObjectList::getXYZMinMax(double& xmin, double& xmax,
 			       double& ymin, double& ymax,
-			       double& zmin, double& zmax) {
+			       double& zmin, double& zmax,
+			       bool addEpsilon) {
 
   list<GalaxyObject*>::const_iterator i = objPtrList.begin();
   xmin = xmax = (*i)->getX();
@@ -170,5 +171,14 @@ GalaxyObjectList::getXYZMinMax(double& xmin, double& xmax,
     if (ymax < y)  ymax = y;
     if (zmin > z)  zmin = z;
     if (zmax < z)  zmax = z;
+  }
+  if (addEpsilon) {
+    const double tinyfrac = 1e-6;
+    double epsilon = (xmax - xmin) * tinyfrac;
+    xmin -= epsilon;    xmax += epsilon;
+    epsilon = (ymax - ymin) * tinyfrac;
+    ymin -= epsilon;    ymax += epsilon;
+    epsilon = (zmax - zmin) * tinyfrac;
+    zmin -= epsilon;    zmax += epsilon;
   }
 }

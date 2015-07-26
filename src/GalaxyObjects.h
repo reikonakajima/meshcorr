@@ -88,7 +88,8 @@ class GalaxyObjectList {
   vector<GalaxyObject*> getVectorForm();
   void getXYZMinMax(double& xmin, double& xmax,
 		    double& ymin, double& ymax,
-		    double& zmin, double& zmax);
+		    double& zmin, double& zmax,
+		    bool addEpsilon=false);
 
   void setComovingCoords(Cosmology cosmo);
 

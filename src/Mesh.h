@@ -26,12 +26,12 @@ using std::multimap;
 //
 // Mesh: specialized here for 3D vectors.
 // For 2D objects just set nn3=1.
-// Ttype should have a member function getPos(), which returns Tpos[]
+// Ttype should have a member function getX(), getY(), getZ()
 //
 template <class Ttype, class Tpos = double>   // Ttype = SDSSpzObject*, SourceObject*, etc.
 class Mesh {
  public:
-  // constructor for [min, max)
+  // constructor for data in a (possibly periodic) box, for [min, max)
   Mesh(int nn1, int nn2, int nn3, vector<Ttype> &P, 
        bool period=false,
        Tpos minx = 0., Tpos maxx = 1., 

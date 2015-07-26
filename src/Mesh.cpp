@@ -1,5 +1,7 @@
 #include "mesh.h"
 
+
+
 template <class Ttype, class Tpos> 
 Mesh<Ttype, Tpos>::Mesh(int nn1, int nn2, int nn3,
 			vector<Ttype>& P, bool period,
