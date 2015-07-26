@@ -28,9 +28,19 @@ Mesh<Ttype, Tpos>::Mesh(double dx, double dy, double dz,
   for (int nn=0; nn<n_cell; nn++) head[nn]=tail[nn]=-1;
   for (int nn=0; nn<np; nn++) next[nn]=-1;
   for (int nn=0; nn<np; nn++) {
-    int ix = int((periodicX(P[nn]->getX())-xmin)/dx);
-    int iy = int((periodicY(P[nn]->getY())-ymin)/dy);
-    int iz = int((periodicZ(P[nn]->getZ())-zmin)/dz);
+    int ix, iy, iz;
+    if (isPeriodic) {
+      ix = int((periodicX(P[nn]->getX())-xmin)/dx);
+      iy = int((periodicY(P[nn]->getY())-ymin)/dy);
+      iz = int((periodicZ(P[nn]->getZ())-zmin)/dz);
+    } else {
+      ix = int( (P[nn]->getX()-xmin) /dx);
+      iy = int( (P[nn]->getY()-ymin) /dy);
+      iz = int( (P[nn]->getZ()-zmin) /dz);
+    }
+    if (ix>=nm[0] || iy>=nm[1] || iz>=nm[2]) {  // can't catch the "subtle" <0 errors
+      throw MeshError("one of the xmax/ymax/zmax was probably not set correctly");
+    }
     int ii = nm[1]*nm[2]*ix+nm[2]*iy+iz;
     if (head[ii]<0) {	// Cell is empty.
       head[ii]=tail[ii]=nn;

@@ -19,8 +19,16 @@
 using std::list;
 using std::vector;
 using std::multimap;
+#include "Std.h"
 #include "Bounds.h"
 #include "AstronomicalConstants.h"
+
+
+class MeshError : public MyException {
+ public:
+ MeshError(const string& m="") :
+  MyException("MeshError: " +m) {}
+};
 
 
 //
