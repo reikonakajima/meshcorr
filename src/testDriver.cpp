@@ -108,12 +108,14 @@ main(int argc, char* argv[]) {
     double dx = 100.;  // size of the mesh cell
     bool periodic = false;
     vector<GalaxyObject*> gamavector = gama_list.getVectorForm();
+    cerr << "gama_list size: "  << gama_list.size() << endl;
     double xmin, xmax, ymin, ymax, zmin, zmax;
     bool addEpsilon = true;
     gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax, addEpsilon);
     cerr << xmin << " " << xmax << " "
 	 << ymin << " " << ymax << " "
 	 << zmin << " " << zmax << endl;
+    cerr << "dx=dy=dz: " << dx << endl;
     Mesh<GalaxyObject*, double> mesh(dx, dx, dx, gamavector, periodic,
 				     xmin, xmax, ymin, ymax, zmin, zmax);
 
@@ -129,6 +131,7 @@ main(int argc, char* argv[]) {
     double minr = 0.;
     // find mesh position for current object x0,y0,z0
     list<int> near_index = mesh.getNearMeshList(x0, y0, z0, maxr, minr);
+    cerr << "near_index size: "  << near_index.size() << endl;
 
     string out_fname_test = "test.out";
     ofstream outf_test(out_fname_test.c_str());
