@@ -68,16 +68,7 @@ Mesh<Ttype, Tpos>::getNearMeshList(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin)
   int sry = int(rmax/dy)+1;
   int srz = int(rmax/dz)+1;
 
-  // DEBUG
-  cerr << "rmin, rmax: " << rmin << ", " << rmax << endl;
-  cerr << " x,  y,  z: " <<  x << ", " <<  y << ", " <<  z << endl;
-  cerr << "ix, iy, iz: " << ix << ", " << iy << ", " << iz << endl;
-  cerr << "srx, sry, srz: " << srx << ", " << sry << ", " << srz << endl;
-
   std::vector<int> close = closemeshes(ix,iy,iz,srx,sry,srz);
-
-  // DEBUG
-  cerr << "close.size(): " << close.size() << endl;
 
   for (std::vector<int>::iterator ii=close.begin(); ii!=close.end(); ii++) {
     if ( (p=head[*ii])>=0 ) {
@@ -392,11 +383,6 @@ Mesh<Ttype, Tpos>::closemeshes(int ix, int iy, int iz,
     int srymax = iy+sry;  if (srymax>=nm[1]) srymax=nm[1]-1;  if (srymax<  0   ) srymax=0; 
     int srzmax = iz+srz;  if (srzmax>=nm[2]) srzmax=nm[2]-1;  if (srzmax<  0   ) srzmax=0; 
     retlist.resize( (srxmax-srxmin+1)*(srymax-srymin+1)*(srzmax-srzmin+1) );
-
-    // DEBUG
-    cerr << "srxmin, srxmax: " << srxmin << " " << srxmax << endl;
-    cerr << "srymin, srymax: " << srymin << " " << srymax << endl;
-    cerr << "srzmin, srzmax: " << srzmin << " " << srzmax << endl;
 
     nn = 0;
     for (int iix=srxmin; iix<=srxmax; iix++)

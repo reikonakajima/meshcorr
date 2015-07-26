@@ -15,11 +15,12 @@ xyz.py
 
 """
 
-datafname = 'comovingcoord3d.out'
-(ra,dec,redshift,x,y,z) = np.loadtxt(datafname, unpack=True)
-
 fig = P.figure()
 ax = fig.add_subplot(111,projection='3d')
+
+
+datafname = 'comovingcoord3d.out'
+(ra,dec,redshift,x,y,z) = np.loadtxt(datafname, unpack=True)
 
 ax.scatter(x,y,z, c='r', marker='.')
 
@@ -29,12 +30,34 @@ def init():
 def animate(i):
     ax.view_init(elev=10, azim=i)
 
-for ii in xrange(0,360,1):
+#for ii in xrange(0,360,1):
+for ii in xrange(0,1,1):
     ax.view_init(elev=10., azim=ii)
     P.savefig("xyz%04d"%ii + ".png")
 
-shcommand = "ffmpeg -i xyz%04d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4"
-S.call(shcommand, shell=True)
+
+datafname = 'test.out'
+(ra,dec,redshift,x,y,z) = np.loadtxt(datafname, unpack=True)
+
+ax.scatter(x,y,z, c='b', marker='x')
+
+def init():
+    ax.scatter(x,y,z, c='b', marker='x')
+
+def animate(i):
+    ax.view_init(elev=10, azim=i)
+
+#for ii in xrange(0,360,1):
+for ii in xrange(0,1,1):
+    ax.view_init(elev=10., azim=ii)
+    P.savefig("xyz%04d"%ii + ".png")
+
+ax.set_xlim3d(-800,0)
+ax.set_ylim3d(0,900)
+ax.set_zlim3d(0,20)
+
+#shcommand = "ffmpeg -i xyz%04d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4"
+#S.call(shcommand, shell=True)
 
 
 """

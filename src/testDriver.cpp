@@ -130,28 +130,28 @@ main(int argc, char* argv[]) {
     double maxr = 100.;
     double minr = 0.;
     // find mesh position for current object x0,y0,z0
-    list<int> near_index = mesh.getNearMeshList(x0, y0, z0, maxr, minr);
-    cerr << "near_index size: "  << near_index.size() << endl;
+    list<int> nbr_index = mesh.getNearMeshList(x0, y0, z0, maxr, minr);
+    cerr << "nbr_index size: "  << nbr_index.size() << endl;
 
     string out_fname_test = "test.out";
     ofstream outf_test(out_fname_test.c_str());
     outf_test << "#ra          dec        redshift    x           y           z" << endl;
-    for (int i=0; i<near_index.size(); ++i) {
+    for (std::list<int>::iterator ii=nbr_index.begin(); ii!=nbr_index.end(); ii++) {
       outf_test.setf(ios::fixed, ios::floatfield);
       outf_test << setw(11) << setprecision(6)
-	   << gamavector[i]->getRA() << " "
+	   << gamavector[*ii]->getRA() << " "
 	   << setw(10) << setprecision(6)
-	   << gamavector[i]->getDec() << " "
+	   << gamavector[*ii]->getDec() << " "
 	   << " "
 	   << setw(5) << setprecision(3)
-	   << gamavector[i]->getRedshift() << " "
+	   << gamavector[*ii]->getRedshift() << " "
 	   << "   "
 	   << setw(11) << setprecision(6)
-	   << gamavector[i]->getX() << " "
+	   << gamavector[*ii]->getX() << " "
 	   << setw(11) << setprecision(6)
-	   << gamavector[i]->getY() << " "
+	   << gamavector[*ii]->getY() << " "
 	   << setw(11) << setprecision(6)
-	   << gamavector[i]->getZ() << endl;
+	   << gamavector[*ii]->getZ() << endl;
     }
 
     /*
