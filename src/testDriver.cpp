@@ -102,6 +102,69 @@ main(int argc, char* argv[]) {
 	   << (*i)->getZ() << endl;
     }
 
+    //
+    // test Mesh compatibility
+    //
+    int n = 10;
+    bool periodic = false;
+    vector<GalaxyObject*> gamavector = gama_list.getVectorForm();
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax);
+    cerr << xmin << " " << xmax << " "
+	 << ymin << " " << ymax << " "
+	 << zmin << " " << zmax << endl;
+    Mesh<GalaxyObject*, double> mesh(n, n, n, gamavector, periodic,
+				     xmin, xmax, ymin, ymax, zmin, zmax);
+
+
+    //
+    // test Mesh nearest neighbor of x0,y0,z0  (getNeighborList)
+    //
+    double x0 = -300.;
+    double y0 = 400.;
+    double z0 = 0.;
+    cerr << x0 << " " << y0 << " " << z0 << endl;
+    double maxr = 100.;
+    double minr = 0.;
+    // find mesh position for current object x0,y0,z0
+    double xsize = (xmax - xmin);
+    double ysize = (ymax - ymin);
+    double zsize = (zmax - zmin);
+    cerr << xsize << " " << ysize << " " << zsize << endl;
+    int ix0 = static_cast<int>(n / xsize * (x0-xmin));
+    int iy0 = static_cast<int>(n / ysize * (y0-ymin));
+    int iz0 = static_cast<int>(n / zsize * (z0-zmin));
+    cerr << ix0 << " " << iy0 << " " << iz0 << endl;
+    // find maximum search radius in the x,y,z axis (assume cartesian coordinates)
+    int srx = static_cast<int>(maxr / xsize) + 2;
+    int sry = static_cast<int>(maxr / ysize) + 2;
+    int srz = static_cast<int>(maxr / zsize) + 2;
+    cerr << srx << " " << sry << " " << srz << endl;
+    int srx_min = (ix0-srx) < 0 ? 0 : (ix0-srx);
+    int srx_max = (ix0+srx) >= n ? n-1 : (ix0+srx);
+    int sry_min = (iy0-sry) < 0 ? 0 : (iy0-sry);
+    int sry_max = (iy0+sry) >= n ? n-1 : (iy0+sry);
+    int srz_min = (iz0-srz < 0) ? 0 : (iz0-srz);
+    int srz_max = (iz0+srz >= n) ? n-1 : (iz0+srz);
+    cerr << srx_min << " " << sry_min << " " << srz_min << endl;
+    cerr << srx_max << " " << sry_max << " " << srz_max << endl;
+    // identify all mesh within search radius
+    for (int ix = srx_min; ix <= srx_max; ix++) {
+      for (int iy = sry_min; iy <= sry_max; iy++) {
+	for (int iz = srz_min; iz <= srz_max; iz++) {
+	  int ii;
+	  if (ix*ix + iy*iy + iz*iz < srx) {
+	    ;
+	  }
+	}
+      }
+    }
+
+      // calculate mesh id
+
+      // calculate distance to all galaxies
+
+      // include in neighbor list if within range
 
   } catch (MyException& m) {
     m.dump(cerr);

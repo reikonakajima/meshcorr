@@ -1,39 +1,5 @@
 #include "mesh.h"
 
-
-/*
-template <class Ttype, class Tpos> 
-Mesh<Ttype, Tpos>::Mesh(int nn1, int nn2, int nn3,
-			vector<Ttype>& P, bool period) {
-  isPeriodic=period;
-  nm.resize(3);
-  nm[0] = nn1;
-  nm[1] = nn2;
-  nm[2] = nn3;
-  int np= P.size();
-  head.resize(nn1*nn2*nn3);
-  next.resize(np);
-  vector<int> tail(nn1*nn2*nn3);
-  dat = &P;
-  for (int nn=0; nn<nn1*nn2*nn3; nn++) head[nn]=tail[nn]=-1;
-  for (int nn=0; nn<np; nn++) next[nn]=-1;
-  for (int nn=0; nn<np; nn++) {
-    int ix = int(nn1*periodic(P[nn].pos[0]));
-    int iy = int(nn2*periodic(P[nn].pos[1]));
-    int iz = int(nn3*periodic(P[nn].pos[2]));
-    int ii = nn2*nn3*ix+nn3*iy+iz;
-    if (head[ii]<0) {	// Cell is empty.
-      head[ii]=tail[ii]=nn;
-    }
-    else {
-      next[tail[ii]] = nn;
-      tail[ii] = nn;
-    }
-  }
-}
-*/
-
-
 template <class Ttype, class Tpos> 
 Mesh<Ttype, Tpos>::Mesh(int nn1, int nn2, int nn3,
 			vector<Ttype>& P, bool period,
@@ -417,4 +383,8 @@ Mesh<Ttype, Tpos>::closemeshes(int ix, int iy, int iz,
   }
   return(retlist);
 }
+
+
+#include "GalaxyObjects.h"
+template class Mesh<GalaxyObject*, double>;  // explicit instantiation
 

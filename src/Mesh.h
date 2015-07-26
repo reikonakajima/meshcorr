@@ -71,7 +71,4 @@ class Mesh {
 };
 
 
-#include "GalaxyObjects.h"
-template class Mesh<GalaxyObject*, double>;  // explicit instantiation
-
 #endif // MESH_H

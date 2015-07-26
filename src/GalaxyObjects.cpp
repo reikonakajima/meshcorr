@@ -148,3 +148,27 @@ GalaxyObjectList::getVectorForm() {
 }
 
 
+void
+GalaxyObjectList::getXYZMinMax(double& xmin, double& xmax,
+			       double& ymin, double& ymax,
+			       double& zmin, double& zmax) {
+
+  list<GalaxyObject*>::const_iterator i = objPtrList.begin();
+  xmin = xmax = (*i)->getX();
+  ymin = ymax = (*i)->getY();
+  zmin = zmax = (*i)->getZ();
+  ++i;
+  double x, y, z;
+  for (; i != objPtrList.end(); ++i) {
+    x = (*i)->getX();
+    y = (*i)->getY();
+    z = (*i)->getZ();
+
+    if (xmin > x)  xmin = x;
+    if (xmax < x)  xmax = x;
+    if (ymin > y)  ymin = y;
+    if (ymax < y)  ymax = y;
+    if (zmin > z)  zmin = z;
+    if (zmax < z)  zmax = z;
+  }
+}

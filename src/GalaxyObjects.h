@@ -84,7 +84,11 @@ class GalaxyObjectList {
   Bounds<double> getBounds() { if (!bounds) setBounds(); return bounds;}
   void setBounds();   // defines bounds
   void resetBounds(); // undefines bounds
+
   vector<GalaxyObject*> getVectorForm();
+  void getXYZMinMax(double& xmin, double& xmax,
+		    double& ymin, double& ymax,
+		    double& zmin, double& zmax);
 
   void setComovingCoords(Cosmology cosmo);
 
