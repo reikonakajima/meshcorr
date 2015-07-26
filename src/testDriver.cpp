@@ -114,6 +114,7 @@ main(int argc, char* argv[]) {
     cerr << xmin << " " << xmax << " "
 	 << ymin << " " << ymax << " "
 	 << zmin << " " << zmax << endl;
+    cerr << static_cast<int>(2.5);
     Mesh<GalaxyObject*, double> mesh(n, n, n, gamavector, periodic,
 				     xmin, xmax, ymin, ymax, zmin, zmax);
 

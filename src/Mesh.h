@@ -32,7 +32,7 @@ template <class Ttype, class Tpos = double>   // Ttype = SDSSpzObject*, SourceOb
 class Mesh {
  public:
   // constructor for data in a (possibly periodic) box, for [min, max)
-  Mesh(int nn1, int nn2, int nn3, vector<Ttype> &P, 
+  Mesh(double dx, double dy, double dz, vector<Ttype> &P,
        bool period=false,
        Tpos minx = 0., Tpos maxx = 1., 
        Tpos miny = 0., Tpos maxy = 1., 

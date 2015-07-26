@@ -1,9 +1,7 @@
 #include "mesh.h"
 
-
-
 template <class Ttype, class Tpos> 
-Mesh<Ttype, Tpos>::Mesh(int nn1, int nn2, int nn3,
+Mesh<Ttype, Tpos>::Mesh(double dx, double dy, double dz,
 			vector<Ttype>& P, bool period,
 			Tpos xmin_, Tpos xmax_,
 			Tpos ymin_, Tpos ymax_,
@@ -11,28 +9,29 @@ Mesh<Ttype, Tpos>::Mesh(int nn1, int nn2, int nn3,
   xmin(xmin_), xmax(xmax_), ymin(ymin_), ymax(ymax_), zmin(zmin_), zmax(zmax_) 
 {
   isPeriodic=period;
+  Tpos xw = xmax-xmin;
+  Tpos yw = ymax-ymin;
+  Tpos zw = zmax-zmin;
   nm.resize(3);
-  nm[0] = nn1;
-  nm[1] = nn2;
-  nm[2] = nn3;
-  dx = (xmax-xmin) / nn1;
-  dy = (ymax-ymin) / nn2;
-  dz = (zmax-zmin) / nn3;
+  nm[0] = static_cast<int>(xw/dx + 1);
+  nm[1] = static_cast<int>(yw/dy + 1);
+  nm[2] = static_cast<int>(zw/dz + 1);
+  int n_cell = nm[0]*nm[1]*nm[2];
   xmid = (xmax+xmin) / 2.0;
   ymid = (ymax+ymin) / 2.0; 
   zmid = (zmax+zmin) / 2.0;
   int np= P.size();
-  head.resize(nn1*nn2*nn3);
+  head.resize(n_cell);
   next.resize(np);
-  vector<int> tail(nn1*nn2*nn3);
+  vector<int> tail(n_cell);
   dat = &P;
-  for (int nn=0; nn<nn1*nn2*nn3; nn++) head[nn]=tail[nn]=-1;
+  for (int nn=0; nn<n_cell; nn++) head[nn]=tail[nn]=-1;
   for (int nn=0; nn<np; nn++) next[nn]=-1;
   for (int nn=0; nn<np; nn++) {
     int ix = int((periodicX(P[nn]->getX())-xmin)/dx);
     int iy = int((periodicY(P[nn]->getY())-ymin)/dy);
     int iz = int((periodicZ(P[nn]->getZ())-zmin)/dz);
-    int ii = nn2*nn3*ix+nn3*iy+iz;
+    int ii = nm[1]*nm[2]*ix+nm[2]*iy+iz;
     if (head[ii]<0) {	// Cell is empty.
       head[ii]=tail[ii]=nn;
     }
