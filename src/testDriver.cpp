@@ -105,17 +105,16 @@ main(int argc, char* argv[]) {
     //
     // test Mesh compatibility
     //
-    int n = 10;
+    double dx = 100.;  // size of the mesh cell
     bool periodic = false;
     vector<GalaxyObject*> gamavector = gama_list.getVectorForm();
     double xmin, xmax, ymin, ymax, zmin, zmax;
-    bool addEpsilon = false;
+    bool addEpsilon = true;
     gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax, addEpsilon);
     cerr << xmin << " " << xmax << " "
 	 << ymin << " " << ymax << " "
 	 << zmin << " " << zmax << endl;
-    cerr << static_cast<int>(2.5);
-    Mesh<GalaxyObject*, double> mesh(n, n, n, gamavector, periodic,
+    Mesh<GalaxyObject*, double> mesh(dx, dx, dx, gamavector, periodic,
 				     xmin, xmax, ymin, ymax, zmin, zmax);
 
 
@@ -129,44 +128,36 @@ main(int argc, char* argv[]) {
     double maxr = 100.;
     double minr = 0.;
     // find mesh position for current object x0,y0,z0
-    double xsize = (xmax - xmin);
-    double ysize = (ymax - ymin);
-    double zsize = (zmax - zmin);
-    cerr << xsize << " " << ysize << " " << zsize << endl;
-    int ix0 = static_cast<int>(n / xsize * (x0-xmin));
-    int iy0 = static_cast<int>(n / ysize * (y0-ymin));
-    int iz0 = static_cast<int>(n / zsize * (z0-zmin));
-    cerr << ix0 << " " << iy0 << " " << iz0 << endl;
-    // find maximum search radius in the x,y,z axis (assume cartesian coordinates)
-    int srx = static_cast<int>(maxr / xsize) + 2;
-    int sry = static_cast<int>(maxr / ysize) + 2;
-    int srz = static_cast<int>(maxr / zsize) + 2;
-    cerr << srx << " " << sry << " " << srz << endl;
-    int srx_min = (ix0-srx) < 0 ? 0 : (ix0-srx);
-    int srx_max = (ix0+srx) >= n ? n-1 : (ix0+srx);
-    int sry_min = (iy0-sry) < 0 ? 0 : (iy0-sry);
-    int sry_max = (iy0+sry) >= n ? n-1 : (iy0+sry);
-    int srz_min = (iz0-srz < 0) ? 0 : (iz0-srz);
-    int srz_max = (iz0+srz >= n) ? n-1 : (iz0+srz);
-    cerr << srx_min << " " << sry_min << " " << srz_min << endl;
-    cerr << srx_max << " " << sry_max << " " << srz_max << endl;
-    // identify all mesh within search radius
-    for (int ix = srx_min; ix <= srx_max; ix++) {
-      for (int iy = sry_min; iy <= sry_max; iy++) {
-	for (int iz = srz_min; iz <= srz_max; iz++) {
-	  int ii;
-	  if (ix*ix + iy*iy + iz*iz < srx) {
-	    ;
-	  }
-	}
-      }
+    list<int> near_index = mesh.getNearMeshList(x0, y0, z0, maxr, minr);
+
+    string out_fname_test = "test.out";
+    ofstream outf_test(out_fname_test.c_str());
+    outf_test << "#ra          dec        redshift    x           y           z" << endl;
+    for (int i=0; i<near_index.size(); ++i) {
+      outf_test.setf(ios::fixed, ios::floatfield);
+      outf_test << setw(11) << setprecision(6)
+	   << gamavector[i]->getRA() << " "
+	   << setw(10) << setprecision(6)
+	   << gamavector[i]->getDec() << " "
+	   << " "
+	   << setw(5) << setprecision(3)
+	   << gamavector[i]->getRedshift() << " "
+	   << "   "
+	   << setw(11) << setprecision(6)
+	   << gamavector[i]->getX() << " "
+	   << setw(11) << setprecision(6)
+	   << gamavector[i]->getY() << " "
+	   << setw(11) << setprecision(6)
+	   << gamavector[i]->getZ() << endl;
     }
 
+    /*
       // calculate mesh id
 
       // calculate distance to all galaxies
 
       // include in neighbor list if within range
+     */
 
   } catch (MyException& m) {
     m.dump(cerr);
