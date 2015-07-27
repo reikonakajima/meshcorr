@@ -49,7 +49,7 @@ class Mesh {
   // list<int> nearobj(Tpos pos[], Tpos rmin, Tpos rmax);
   list<int> getNearMeshList(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin = 0);
   // Returns a map of (dist.sq., obj.index)
-  multimap<double,int> getNearMeshMap(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin = 0);
+  multimap<int, double> getNearMeshMap(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin = 0);
   // Returns a map of (spherical angle separation, obj.index)
   // *assumes ra/dec are in degrees*
   multimap<double,int> getNearAngleMap(Tpos ra, Tpos dec, Tpos z, Tpos thetamax, Tpos thetamin=0);

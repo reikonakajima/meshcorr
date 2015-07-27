@@ -84,10 +84,10 @@ Mesh<Ttype, Tpos>::getNearMeshList(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin)
 }
 
 
-template <class Ttype, class Tpos> 
-multimap<double, int> 
+template <class Ttype, class Tpos>
+multimap<int,double>
 Mesh<Ttype, Tpos>::getNearMeshMap(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin) {
-  std::multimap<double, int> nbr;   // the return list
+  std::multimap<int, double> nbr;   // the return list
   nbr.clear();          // clear list
   int ix,iy,iz,ii,p;
   Tpos dst2;
@@ -103,7 +103,7 @@ Mesh<Ttype, Tpos>::getNearMeshMap(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin) 
       do {
 	dst2 = distance2((*dat)[p]->getX(), (*dat)[p]->getY(), (*dat)[p]->getZ(), x, y, z);
 	if (dst2<rmax*rmax && dst2>=rmin*rmin) {
-	  nbr.insert(std::pair<double,int>(dst2,p));
+	  nbr.insert(std::pair<double,int>(p,dst2));
 	}
       } while( (p=next[p])>=0 );
     }
