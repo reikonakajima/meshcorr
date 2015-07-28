@@ -10,6 +10,7 @@
 #include "Cosmology.h"
 #include "Mesh.h"
 #include "Histogram.h"
+#include <CCfits/CCfits>
 using std::ios;
 using std::ostringstream;
 using std::setw;
@@ -22,7 +23,7 @@ const string usage =
   "\n"
   "testDriver: calculate tangential shear around a point (galaxy-galaxy lensing signal)\n"
   "\n"
-  " usage: testDriver <GAMA_catalog> <random_catalog>\n"
+  " usage: testDriver <GAMA_FITS_catalog> <random_FITS_catalog>\n"
   "  GAMA_catalog:  lens catalog\n"
   "  \n"
   //  " output #1: file name:\" "+outfprefix+suffix+"\"\n"
@@ -38,7 +39,7 @@ main(int argc, char* argv[]) {
     //
     // process arguments
     //
-    if (argc < 2) {
+    if (argc < 3) {
       cerr << usage;
       exit(2);
     }

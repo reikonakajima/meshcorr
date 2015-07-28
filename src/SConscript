@@ -29,7 +29,7 @@ env.Object('Mesh.cpp')
 env.Object('Histogram.cpp')
 
 env.Object('utilities/StringStuff.cpp')
-env.Object('utilities/Table.cpp')
+env.Object('utilities/GTable.cpp')
 env.Object('cosmology/Cosmology.cpp')
 
 # Library file containing generic code

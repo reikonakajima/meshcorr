@@ -4,8 +4,8 @@
 // D is the value class, which must have + and * operations
 // to permit interpolation.
 // 	$Id: Table.h,v 1.4 2004-03-03 14:26:58 garyb Exp $
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef GTABLE_H
+#define GTABLE_H
 
 #include "Function1d.h"
 #include "Std.h"
@@ -17,52 +17,52 @@ using std::vector;
 #include <sstream>
 
 // Exception classes:
-class TableError: public MyException {
+class GTableError: public MyException {
  public:
-  TableError(const string &m=""): MyException("Table Error: " +m) {}
+  GTableError(const string &m=""): MyException("GTable Error: " +m) {}
 };
-class TableOutOfRange: public TableError {
+class GTableOutOfRange: public GTableError {
 public:
-  TableOutOfRange(): TableError("Argument out of range") {}
+  GTableOutOfRange(): GTableError("Argument out of range") {}
 };
-class TableReadError: public TableError {
+class GTableReadError: public GTableError {
 public:
-  TableReadError(const string &c): 
-    TableError("Data read error for line ->"+c) {}
+  GTableReadError(const string &c): 
+    GTableError("Data read error for line ->"+c) {}
 };
 
-// Table element:
+// GTable element:
 template<class V=double, class A=double>
-class TableEntry {
+class GTableEntry {
 public:
-  TableEntry(A a, V v): arg(a), val(v) {}
+  GTableEntry(A a, V v): arg(a), val(v) {}
   A arg;
   V val;
-  bool operator==(const TableEntry rhs) const {return arg==rhs.arg;}
+  bool operator==(const GTableEntry rhs) const {return arg==rhs.arg;}
   bool operator==(const A rhs) const {return arg==rhs;}
-  bool operator!=(const TableEntry rhs) const {return arg!=rhs.arg;}
+  bool operator!=(const GTableEntry rhs) const {return arg!=rhs.arg;}
   bool operator!=(const A rhs) const {return arg!=rhs;}
-  bool operator>(const TableEntry rhs) const {return arg>rhs.arg;}
+  bool operator>(const GTableEntry rhs) const {return arg>rhs.arg;}
   bool operator>(const A rhs) const {return arg>rhs;}
-  bool operator<(const TableEntry rhs) const {return arg<rhs.arg;}
+  bool operator<(const GTableEntry rhs) const {return arg<rhs.arg;}
   bool operator<(const A rhs) const {return arg<rhs;}
-  bool operator<=(const TableEntry rhs) const {return arg<=rhs.arg;}
+  bool operator<=(const GTableEntry rhs) const {return arg<=rhs.arg;}
   bool operator<=(const A rhs) const {return arg>=rhs;}
-  bool operator>=(const TableEntry rhs) const {return arg>=rhs.arg;}
+  bool operator>=(const GTableEntry rhs) const {return arg>=rhs.arg;}
   bool operator>=(const A rhs) const {return arg>=rhs;}
 };
 
-// The Table itself:
+// The GTable itself:
 template<class V=double, class A=double>
-class Table: public Function1d<V,A> {
+class GTable: public Function1d<V,A> {
 public:
   enum interpolant {linear, spline, floor, ceil};
   //Construct empty table
-  Table(interpolant i=linear): v(), iType(i), isReady(false), y2() {} 
-  //Table from two arrays:
-  Table(const A* argvec, const V* valvec, int N, interpolant in=linear) ;
-  Table(const vector<A> &a, const vector<V> &v, interpolant in=linear) ;
-  Table(istream &is, interpolant in=linear): v(), iType(in), isReady(),
+  GTable(interpolant i=linear): v(), iType(i), isReady(false), y2() {} 
+  //GTable from two arrays:
+  GTable(const A* argvec, const V* valvec, int N, interpolant in=linear) ;
+  GTable(const vector<A> &a, const vector<V> &v, interpolant in=linear) ;
+  GTable(istream &is, interpolant in=linear): v(), iType(in), isReady(),
 					     y2() {read(is);}
   void clear() {v.clear(); isReady=false;}
   void read(istream &is);
@@ -71,9 +71,9 @@ public:
   V lookup(const A a) const ;	//interp, but exception if beyond bounds
   int size() const {return v.size();}	//size of table
   A argMin() const { setup(); if (v.size()>0) return v.front().arg;
-   else throw TableError("argMin for null Table");}	//Smallest argument
+   else throw GTableError("argMin for null GTable");}	//Smallest argument
   A argMax() const { setup(); if (v.size()>0) return v.back().arg;
-   else throw TableError("argMax for null Table");} 	//Largest argument
+   else throw GTableError("argMax for null GTable");} 	//Largest argument
 
   template <class T>
   void TransformVal(T &xfrm) {
@@ -91,7 +91,7 @@ public:
 /**/void dump() const {setup(); for (citer p=v.begin(); p!=v.end(); ++p) 
 		 cout << p->arg << " " << p->val << endl; }
 private:
-  typedef TableEntry<V,A> Entry;
+  typedef GTableEntry<V,A> Entry;
   typedef typename vector<Entry>::const_iterator citer;
   typedef typename vector<Entry>::iterator iter;
   interpolant iType;

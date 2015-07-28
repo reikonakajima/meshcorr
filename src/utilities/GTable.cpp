@@ -1,11 +1,11 @@
-#include "Table.h"
+#include "GTable.h"
 
 // Look up an index.  Use STL binary search; maybe faster to use
 template<class V, class A>
-typename Table<V,A>::iter Table<V,A>::upperIndex(const A a) const {
+typename GTable<V,A>::iter GTable<V,A>::upperIndex(const A a) const {
   setup();
   Entry e(a,0); 
-  if (v.size()==0 || a<argMin())  throw TableOutOfRange();
+  if (v.size()==0 || a<argMin())  throw GTableOutOfRange();
   // First see if the previous index is still ok
   if (lastIndex>0 && lastIndex<v.size()) {
     iter p = (v.begin()+lastIndex);
@@ -15,21 +15,21 @@ typename Table<V,A>::iter Table<V,A>::upperIndex(const A a) const {
   // This STL algorithm uses binary search to get 1st element >= ours.
   iter p = std::lower_bound(v.begin(), v.end(), e);
   // bounds check
-  if (p==v.end()) throw TableOutOfRange();
+  if (p==v.end()) throw GTableOutOfRange();
   lastIndex = p-v.begin();
   return p;
 }
 
 //new element for table.
 template<class V, class A>
-void Table<V,A>::addEntry(const A _arg, const V _val) {
+void GTable<V,A>::addEntry(const A _arg, const V _val) {
   Entry e(_arg,_val);
   v.push_back(e);
   isReady = false;	//re-sort array next time used
 }
 
 template<class V, class A>
-Table<V,A>::Table(const A* argvec, const V* valvec, int N, 
+GTable<V,A>::GTable(const A* argvec, const V* valvec, int N,
 		  interpolant in): v(), iType(in), y2() {
   v.reserve(N);
   const A* aptr;
@@ -43,11 +43,11 @@ Table<V,A>::Table(const A* argvec, const V* valvec, int N,
 }
 
 template<class V, class A>
-Table<V,A>::Table(const vector<A> &aa, const vector<V> &vv, 
+GTable<V,A>::GTable(const vector<A> &aa, const vector<V> &vv,
 		  interpolant in): v(), iType(in), y2() {
   v.reserve(aa.size());
   if (vv.size()<aa.size()) 
-    throw TableError("input vector lengths don't match");
+    throw GTableError("input vector lengths don't match");
   typename vector<A>::const_iterator aptr=aa.begin();
   typename vector<V>::const_iterator vptr=vv.begin();
   for (int i=0; i<aa.size(); i++, ++aptr, ++vptr) {
@@ -59,23 +59,23 @@ Table<V,A>::Table(const vector<A> &aa, const vector<V> &vv,
 
 //lookup & interp. function value. - this one returns 0 out of bounds.
 template<class V, class A>
-V Table<V,A>::operator() (const A a) const {
+V GTable<V,A>::operator() (const A a) const {
   try {
     citer p1(upperIndex(a));
     return interpolate(a,p1);
-  } catch (TableOutOfRange) {
+  } catch (GTableOutOfRange) {
     return static_cast<V> (0);
   }
 }
 //lookup & interp. function value.
 template<class V, class A>
-V Table<V,A>::lookup(const A a) const {
+V GTable<V,A>::lookup(const A a) const {
   citer p1(upperIndex(a));
   return interpolate(a,p1);
 }
 
 template<class V, class A>
-V Table<V,A>::interpolate(const A a, const citer p1) const { 
+V GTable<V,A>::interpolate(const A a, const citer p1) const {
   setup();	//do any necessary prep
   // First case when there is for single-point table
   if (v.size()==1) return p1->val;
@@ -103,12 +103,12 @@ V Table<V,A>::interpolate(const A a, const citer p1) const {
   } else if (iType==ceil) {
     return p1->val;
   } else {
-    throw TableError("interpolation method not yet implemented");
+    throw GTableError("interpolation method not yet implemented");
   }
 }
 
 template<class V, class A>
-void Table<V,A>::read(istream &is) {
+void GTable<V,A>::read(istream &is) {
   string line;
   const string comments="#;!";	//starts comment
   V vv;
@@ -124,14 +124,14 @@ void Table<V,A>::read(istream &is) {
     // try reading arg & val from line:
     std::istringstream iss(line);
     iss >> aa >> vv;
-    if (iss.fail()) throw TableReadError(line) ;
+    if (iss.fail()) throw GTableReadError(line) ;
     addEntry(aa,vv);
   }
 }
 
 // Do any necessary setup of the table before using
 template<class V, class A>
-void Table<V,A>::setup() const {
+void GTable<V,A>::setup() const {
   if (isReady) return;
   sortIt();
   if (v.size()<=1) {
@@ -142,7 +142,7 @@ void Table<V,A>::setup() const {
     // Set up the 2nd-derivative table for splines
     // Derive this from Numerical Recipes spline.c
     int n = v.size();
-    if (n<2) throw TableError("Spline Table with only 1 entry");
+    if (n<2) throw GTableError("Spline GTable with only 1 entry");
 
     V  p,qn,sig,un;
 
@@ -174,4 +174,4 @@ void Table<V,A>::setup() const {
   }
 }
 
-template class Table<>;
+template class GTable<>;

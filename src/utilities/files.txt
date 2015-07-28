@@ -3,7 +3,7 @@ Matrix.cpp
 Poisson.cpp
 Pset.cpp
 StringStuff.cpp
-Table.cpp
+GTable.cpp
 fft.cpp
 fft3.cpp
 odeint.cpp

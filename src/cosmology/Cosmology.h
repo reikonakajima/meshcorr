@@ -10,7 +10,7 @@
 #ifndef COSMOLOGY_H
 #define COSMOLOGY_H
 #include "Std.h"
-#include "Table.h"
+#include "GTable.h"
 #include "Simpson.h"
 
 namespace cosmology {
@@ -92,7 +92,7 @@ private:
   // Get one of the cosmology functions from lookup tables:
   double getIntegral(double z, FunctionType t) const; 
   // Stored tables of the various functional integrals
-  mutable vector<Table<>* > integrals;
+  mutable vector<GTable<>* > integrals;
 
   // This class will be used as integrand and knows all the key
   // formulae:
