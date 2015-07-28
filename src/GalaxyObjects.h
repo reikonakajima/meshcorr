@@ -18,6 +18,8 @@
 #include "Cosmology.h"
 #include "Bounds.h"
 #include "AstronomicalConstants.h"
+#include "Histogram.h"
+#include "Mesh.h"
 using namespace cosmology;
 using std::list;
 using std::istringstream;
@@ -110,6 +112,14 @@ class GalaxyObjectList {
 				     const double dec);
 
 };
+
+
+// Calculates Lande-Szalay correlation estimator (DD - DR - RD + RR) / RR
+vector<double> LandeSzalay(GalaxyObjectList data, GalaxyObjectList randoms,
+			   const HistogramLogBin& rbin, double mesh_dx,
+			   vector<double>& DD, vector<double>& DR,
+			   vector<double>& RD, vector<double>& RR);
+
 
 
 #endif // GALAXYOBJECTS_H

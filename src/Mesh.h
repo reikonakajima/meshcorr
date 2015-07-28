@@ -45,6 +45,10 @@ class Mesh {
        Tpos minx = 0., Tpos maxx = 1., 
        Tpos miny = 0., Tpos maxy = 1., 
        Tpos minz = 0., Tpos maxz = 1.);
+  // Returns the input data size
+  int obj_count() { return dat->size(); }
+  // Returns the number of mesh cell counts
+  int cell_count() { return head.size(); }
   // Returns a list of indices for objects near pos.
   // list<int> nearobj(Tpos pos[], Tpos rmin, Tpos rmax);
   list<int> getNearMeshList(Tpos x, Tpos y, Tpos z, Tpos rmax, Tpos rmin = 0);
