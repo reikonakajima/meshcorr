@@ -44,30 +44,35 @@ main(int argc, char* argv[]) {
       exit(2);
     }
 
-    // read in a series of gama files
-    GAMAObjectList gama_list;
-    for (int i_arg=1; i_arg<argc; i_arg++) {
-      const string gama_filename = argv[i_arg];
-    
-      /// open gama file
-      ifstream gamaf(gama_filename.c_str());
-      if (!gamaf) 
-	throw MyException("GAMA catalog file " + gama_filename + " not found");
-      gama_list.read(gamaf);
-    }
+    // read in gama files
+    int i_arg = 0;
+    const string gama_filename = argv[++i_arg];
+    ifstream gamaf(gama_filename.c_str());
+    if (!gamaf)
+      throw MyException("GAMA catalog file " + gama_filename + " not found");
+    GAMAObjectList gama_list(gama_filename);
 
+    /*
+    /// open random file
+    const string random_filename = argv[++i_arg];
+    ifstream randomf(gama_filename.c_str());
+    if (!randomf)
+      throw MyException("Random catalog file " + random_filename + " not found");
+    GalaxyObjectList random_list(randomf);
+    */
 
     //
     // diagnostic error messages
     //
     cerr << "=== testDriver ===" << endl;
     cerr << "GAMA catalog ...... " << argv[1] << endl;
-    if (argc > 2)
-      for (int i=2; i<argc; ++i) {
-	cerr << "             ...... " << argv[i] << endl;
-      }
     cerr << "     count ........ " << gama_list.size() << endl;
     cerr << "     bounds ....... " << gama_list.getBounds() << endl;
+    cerr << "Random catalog .... " << argv[2] << endl;
+    /*
+    cerr << "     count ........ " << random_list.size() << endl;
+    cerr << "     bounds ....... " << random_list.getBounds() << endl;
+    */
 
     if (gama_list.size() == 0) {
       cerr << "no gama objects, exiting" << endl;
@@ -75,34 +80,16 @@ main(int argc, char* argv[]) {
     }
 
     //
-    // test cosmology output
+    // set XYZ accoring to cosmology
     //
     double Omega_m = 0.73;
     double Omega_lambda = 0.27;
     Cosmology cosmo(Omega_m, Omega_lambda);
+    cerr << "calculating comoving coordinates for data" << endl;
     gama_list.setComovingCoords(cosmo);
-    string out_fname = "comovingcoord3d.out";
-    cerr << "Test cosmological output in " << out_fname << endl;
-    ofstream outf(out_fname.c_str());
-    outf << "#ra          dec        redshift    x           y           z" << endl;
-    list<GalaxyObject*>::iterator i = gama_list.objListBegin();
-    for (; i != gama_list.objListEnd(); ++i) {
-      outf.setf(ios::fixed, ios::floatfield);
-      outf << setw(11) << setprecision(6)
-	   << (*i)->getRA() << " "
-	   << setw(10) << setprecision(6)
-	   << (*i)->getDec() << " "
-	   << " "
-	   << setw(5) << setprecision(3)
-	   << (*i)->getRedshift() << " "
-	   << "   "
-	   << setw(11) << setprecision(6)
-	   << (*i)->getX() << " "
-	   << setw(11) << setprecision(6)
-	   << (*i)->getY() << " "
-	   << setw(11) << setprecision(6)
-	   << (*i)->getZ() << endl;
-    }
+    //cerr << "calculating comoving coordinates for randoms" << endl;
+    // random_list.setComovingCoords(cosmo);
+
 
 
     int nbin = 5;

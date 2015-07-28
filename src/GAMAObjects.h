@@ -25,6 +25,7 @@ using std::multimap;
 #include <string>
 using std::istringstream;
 #include "Std.h"
+#include <CCfits/CCfits>
 
 
 class GAMAObjectError : public MyException {
@@ -106,8 +107,10 @@ class GAMAObjectList : public GalaxyObjectList {
  public:
   // constructor, creates empty list
   GAMAObjectList() {};
-  // constructor, reads input stream
+  // constructor, reads input stream (assumes ASCII (Edo's) file)
   GAMAObjectList(istream& is);
+  // constructor, read FITS file input
+  GAMAObjectList(const string fits_filename);
 
   // read istream (returns size of read list)
   int read(istream& is);

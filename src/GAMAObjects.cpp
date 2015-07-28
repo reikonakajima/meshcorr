@@ -35,7 +35,7 @@ GAMAObject::GAMAObject(const string buffer) {
 
 
 //
-// GAMAObjectList() : constructor
+// GAMAObjectList() : constructor for ASCII input (Edo's files)
 //
 GAMAObjectList::GAMAObjectList(istream& is)
 {
@@ -44,6 +44,55 @@ GAMAObjectList::GAMAObjectList(istream& is)
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
   return;
 }
+
+
+//
+// GAMAObjectList() : constructor for FITS file input
+//
+GAMAObjectList::GAMAObjectList(const string fits_filename)
+{
+  auto_ptr<CCfits::FITS> pInfile(0);
+
+  // open the fits table and go to the right extension
+  try {
+    pInfile.reset(new CCfits::FITS(fits_filename, CCfits::Read));
+  } catch(MyException& m) {
+    m.dump(cerr);
+  } catch (CCfits::FITS::CantOpen &fitsError) {
+    throw MyException(fitsError.message());
+  } catch (CCfits::FitsException &fitsError) {
+    throw MyException(fitsError.message());
+  }
+  CCfits::ExtHDU& table = pInfile->extension(1);
+
+  // read data from FITS table
+  long n = table.rows();
+  std::vector <double > ra;
+  std::vector <double > dec;
+  std::vector <double > redshift;
+  try {
+    table.column("ALPHA_J2000").read(ra, 0, n);
+    table.column("DELTA_J2000").read(dec, 0, n-1);
+    table.column("Z").read(redshift, 0, n-1);
+  } catch (CCfits::Table::NoSuchColumn &fitsError) {
+    throw MyException(fitsError.message());
+  } catch (CCfits::Column::InvalidRowNumber &fitsError) {
+    throw MyException(fitsError.message());
+  } catch (CCfits::FitsException &fitsError) {
+    throw MyException(fitsError.message());
+  }
+
+  // DEBUG
+  cerr << ra[0] << " " << ra[n-1] << endl;
+  cerr << dec[0] << " " << dec[n-1] << endl;
+  cerr << redshift[0] << " " << redshift[n-1] << endl;
+
+
+  return;
+}
+
+
+
 
 
 int
