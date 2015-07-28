@@ -189,7 +189,7 @@ GalaxyObjectList::getXYZMinMax(double& xmin, double& xmax,
 //
 void
 _accumulatePairCounts (std::multimap<int,double> nbr_index,
-		      const HistogramLogBin& rbin, vector<double> hist){
+		      const HistogramLogBin& rbin, vector<double>& hist){
 
     for (std::multimap<int,double>::iterator ii=nbr_index.begin(); ii!=nbr_index.end(); ii++) {
       if ((*ii).second < rbin.rsq(0)) continue;
