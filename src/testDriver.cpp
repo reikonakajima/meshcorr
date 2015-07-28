@@ -38,7 +38,7 @@ main(int argc, char* argv[]) {
     //
     // process arguments
     //
-    if (argc < 3) {
+    if (argc < 2) {
       cerr << usage;
       exit(2);
     }
@@ -108,7 +108,7 @@ main(int argc, char* argv[]) {
     double minr = 10., maxr = 100., dx_mesh = 100.;  // Mpc/h
     HistogramLogBin rbin(minr,maxr,nbin);
     vector<double> DD, DR, RD, RR;
-    vector<double> xi = LandeSzalay(gama_list, random_list, rbin, dx_mesh,
+    vector<double> xi = LandeSzalay(gama_list, gama_list, rbin, dx_mesh,
 				    DD, DR, RD, RR);
 
     for (int i = 0; i < rbin.size(); ++i) {
