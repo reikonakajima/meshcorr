@@ -1,4 +1,4 @@
-#include "mesh.h"
+#include "Mesh.h"
 
 template <class Ttype, class Tpos> 
 Mesh<Ttype, Tpos>::Mesh(double dx_, double dy_, double dz_,
