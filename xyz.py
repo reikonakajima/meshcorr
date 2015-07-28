@@ -27,6 +27,18 @@ datafname = 'test.out'
 ax.scatter(x0,y0,z0, c='r', marker='.')
 ax.scatter(x,y,z, c='b', marker='x')
 
+# parametric plot
+xx = -300.
+yy = 400.
+zz = -90.
+epsilon = 0.1
+theta = np.linspace(np.pi/2.-epsilon, np.pi/2.+epsilon, 20)
+phi = np.arctan2(yy, xx)
+x1 = np.cos(phi) * np.cos(theta) * 500.
+y1 = np.sin(phi) * np.cos(theta) * 500.
+z1 = np.sin(theta) * 500.
+ax.plot(x1,y1,z1, 'b-')
+
 for ii in xrange(0,360,1):
     ax.view_init(elev=10., azim=ii)
     ax.set_xlim3d(-800,0)

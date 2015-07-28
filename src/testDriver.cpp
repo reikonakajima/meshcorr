@@ -9,6 +9,7 @@
 #include "GAMAObjects.h"
 #include "Cosmology.h"
 #include "Mesh.h"
+#include "Histogram.h"
 using std::ios;
 using std::ostringstream;
 using std::setw;
@@ -21,7 +22,7 @@ const string usage =
   "\n"
   "testDriver: calculate tangential shear around a point (galaxy-galaxy lensing signal)\n"
   "\n"
-  " usage: testDriver <GAMA_catalog>\n"
+  " usage: testDriver <GAMA_catalog> <random_catalog>\n"
   "  GAMA_catalog:  lens catalog\n"
   "  \n"
   //  " output #1: file name:\" "+outfprefix+suffix+"\"\n"
@@ -37,7 +38,7 @@ main(int argc, char* argv[]) {
     //
     // process arguments
     //
-    if (argc < 2) {
+    if (argc < 3) {
       cerr << usage;
       exit(2);
     }
@@ -102,65 +103,25 @@ main(int argc, char* argv[]) {
 	   << (*i)->getZ() << endl;
     }
 
-    //
-    // test Mesh compatibility
-    //
-    double dx = 100.;  // size of the mesh cell
-    bool periodic = false;
-    vector<GalaxyObject*> gamavector = gama_list.getVectorForm();
-    cerr << "gama_list size: "  << gama_list.size() << endl;
-    double xmin, xmax, ymin, ymax, zmin, zmax;
-    bool addEpsilon = true;
-    gama_list.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax, addEpsilon);
-    cerr << xmin << " " << xmax << " "
-	 << ymin << " " << ymax << " "
-	 << zmin << " " << zmax << endl;
-    cerr << "dx=dy=dz: " << dx << endl;
-    Mesh<GalaxyObject*, double> mesh(dx, dx, dx, gamavector, periodic,
-				     xmin, xmax, ymin, ymax, zmin, zmax);
 
+    int nbin = 5;
+    double minr = 10., maxr = 100., dx_mesh = 100.;  // Mpc/h
+    HistogramLogBin rbin(minr,maxr,nbin);
+    vector<double> DD, DR, RD, RR;
+    vector<double> xi = LandeSzalay(gama_list, random_list, rbin, dx_mesh,
+				    DD, DR, RD, RR);
 
-    //
-    // test Mesh nearest neighbor of x0,y0,z0  (getNeighborList)
-    //
-    double x0 = -300.;
-    double y0 = 400.;
-    double z0 = 0.;
-    cerr << x0 << " " << y0 << " " << z0 << endl;
-    double maxr = 100.;
-    double minr = 0.;
-    // find mesh position for current object x0,y0,z0
-    list<int> nbr_index = mesh.getNearMeshList(x0, y0, z0, maxr, minr);
-    cerr << "nbr_index size: "  << nbr_index.size() << endl;
-
-    string out_fname_test = "test.out";
-    ofstream outf_test(out_fname_test.c_str());
-    outf_test << "#ra          dec        redshift    x           y           z" << endl;
-    for (std::list<int>::iterator ii=nbr_index.begin(); ii!=nbr_index.end(); ii++) {
-      outf_test.setf(ios::fixed, ios::floatfield);
-      outf_test << setw(11) << setprecision(6)
-	   << gamavector[*ii]->getRA() << " "
-	   << setw(10) << setprecision(6)
-	   << gamavector[*ii]->getDec() << " "
-	   << " "
-	   << setw(5) << setprecision(3)
-	   << gamavector[*ii]->getRedshift() << " "
-	   << "   "
-	   << setw(11) << setprecision(6)
-	   << gamavector[*ii]->getX() << " "
-	   << setw(11) << setprecision(6)
-	   << gamavector[*ii]->getY() << " "
-	   << setw(11) << setprecision(6)
-	   << gamavector[*ii]->getZ() << endl;
+    for (int i = 0; i < rbin.size(); ++i) {
+      // DEBUG OUTPUT
+      cerr << i << " : "
+	   << rbin[i] << "," << rbin[i+1] << " : "
+	   << DD[i] << " "
+	   << DR[i] << " "
+	   << RD[i] << " "
+	   << RR[i] << " "
+	   << xi[i] << endl;
     }
 
-    /*
-      // calculate mesh id
-
-      // calculate distance to all galaxies
-
-      // include in neighbor list if within range
-     */
 
   } catch (MyException& m) {
     m.dump(cerr);
