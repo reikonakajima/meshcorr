@@ -53,6 +53,7 @@ sub_objects = '''
 	    src/.obj/GalaxyObjects.o
 	    src/.obj/GAMAObjects.o
 	    src/.obj/Mesh.o
+	    src/.obj/Histogram.o
 	    '''.split()
 
 # build the main programs

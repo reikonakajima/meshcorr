@@ -26,6 +26,7 @@ for d in subdirs:
 env.Object('GalaxyObjects.cpp')
 env.Object('GAMAObjects.cpp')
 env.Object('Mesh.cpp')
+env.Object('Histogram.cpp')
 
 env.Object('utilities/StringStuff.cpp')
 env.Object('utilities/Table.cpp')
