@@ -52,6 +52,7 @@ main(int argc, char* argv[]) {
     if (!gamaf)
       throw MyException("GAMA catalog file " + gama_fits_filename + " not found");
     GAMAObjectList gama_list(gama_fits_filename);
+    cerr << "GAMA data read" << endl;
 
 
     /// open random file
@@ -59,7 +60,11 @@ main(int argc, char* argv[]) {
     ifstream randomf(random_fits_filename.c_str());
     if (!randomf)
       throw MyException("Random catalog file " + random_fits_filename + " not found");
-    GAMAObjectList random_list(random_fits_filename);
+    GAMAObjectList master_random_list(random_fits_filename);
+    cerr << "master random data read ";
+    int decimate_factor = 5;
+    GalaxyObjectList random_list = master_random_list.cull(decimate_factor);
+    cerr << "and culled" << endl;
 
 
     //

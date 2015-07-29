@@ -76,12 +76,15 @@ class GalaxyObject {
 class GalaxyObjectList {
  public:
   GalaxyObjectList() {}  // empty list
+
   void sortByRA();
   void sortByDec();
   GalaxyObjectList cullByRA(double minra, double maxra);
   GalaxyObjectList cullByDec(double mindec, double maxdec);
   
   void sortByRedshift();
+
+  GalaxyObjectList cull(int decimate_factor);
 
   int size() const { return objPtrList.size(); }
   Bounds<double> getBounds() { if (!bounds) setBounds(); return bounds;}

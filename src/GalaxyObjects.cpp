@@ -91,6 +91,19 @@ GalaxyObjectList::sortByRedshift() {
 }
 
 
+GalaxyObjectList
+GalaxyObjectList::cull(int decimate_factor) {
+  GalaxyObjectList culledlist;
+  list<GalaxyObject*>::iterator i = objPtrList.begin();
+  for (int j=0; i!=objPtrList.end(); ++i, ++j) {
+    if (j%decimate_factor == 0)
+      culledlist.objPtrList.push_back(*i);
+  }
+  return culledlist;
+}
+
+
+
 void 
 GalaxyObjectList::setBounds() {
 
