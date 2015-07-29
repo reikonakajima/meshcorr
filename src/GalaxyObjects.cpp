@@ -94,6 +94,10 @@ GalaxyObjectList::sortByRedshift() {
 void 
 GalaxyObjectList::setBounds() {
 
+  if (objPtrList.size()==0) {
+    return;
+  }
+
   double minra, maxra, mindec, maxdec;
 
   this->sortByRA();
