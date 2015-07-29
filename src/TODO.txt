@@ -1,0 +1,9 @@
+
+meshcorr:
+ - multiprocessing
+ - weights 
+   . accumulated sum
+   . r_mean
+ - compare 
+   . with STOMP output
+   . with GAMA paper (1311.1211 has xi)  (1506.08222: end of survey report)
