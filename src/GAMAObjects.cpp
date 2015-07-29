@@ -33,7 +33,6 @@ GAMAObject::GAMAObject(const string buffer) {
 }
 
 
-
 //
 // GAMAObjectList() : constructor for ASCII input (Edo's files)
 //
@@ -66,14 +65,14 @@ GAMAObjectList::GAMAObjectList(const string fits_filename)
   CCfits::ExtHDU& table = pInfile->extension(1);
 
   // read data from FITS table
-  long n = table.rows();
-  std::vector <double > ra;
-  std::vector <double > dec;
-  std::vector <double > redshift;
+  long n_row = table.rows();
+  std::vector <double> ra;
+  std::vector <double> dec;
+  std::vector <double> redshift;
   try {
-    table.column("ALPHA_J2000").read(ra, 0, n);
-    table.column("DELTA_J2000").read(dec, 0, n-1);
-    table.column("Z").read(redshift, 0, n-1);
+    table.column("ALPHA_J2000").read(ra, 0, n_row-1);
+    table.column("DELTA_J2000").read(dec, 0, n_row-1);
+    table.column("Z").read(redshift, 0, n_row-1);
   } catch (CCfits::Table::NoSuchColumn &fitsError) {
     throw MyException(fitsError.message());
   } catch (CCfits::Column::InvalidRowNumber &fitsError) {
@@ -82,11 +81,8 @@ GAMAObjectList::GAMAObjectList(const string fits_filename)
     throw MyException(fitsError.message());
   }
 
-  // DEBUG
-  cerr << ra[0] << " " << ra[n-1] << endl;
-  cerr << dec[0] << " " << dec[n-1] << endl;
-  cerr << redshift[0] << " " << redshift[n-1] << endl;
-
+  for (long i=0; i<n_row; ++i)
+    GalaxyObjectList::objPtrList.push_back(new GAMAObject(ra[i], dec[i], redshift[i]));
 
   return;
 }
@@ -106,6 +102,7 @@ GAMAObjectList::read(istream& is)
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
   return (GalaxyObjectList::objPtrList.size() - size_before);
 }
+
 
 bool Compare_GAMAID(GalaxyObject* rhs, GalaxyObject* lhs) {
   GAMAObject* gama_ptr_rhs = static_cast<GAMAObject*>(rhs);

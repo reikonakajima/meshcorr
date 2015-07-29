@@ -88,7 +88,7 @@ class GalaxyObjectList {
   void setBounds();   // defines bounds
   void resetBounds(); // undefines bounds
 
-  vector<GalaxyObject*> getVectorForm();
+  vector<GalaxyObject*> getVectorForm() const;
   void getXYZMinMax(double& xmin, double& xmax,
 		    double& ymin, double& ymax,
 		    double& zmin, double& zmax,
@@ -115,10 +115,12 @@ class GalaxyObjectList {
 
 
 // Calculates Lande-Szalay correlation estimator (DD - DR - RD + RR) / RR
-vector<double> LandeSzalay(GalaxyObjectList data, GalaxyObjectList randoms,
-			   const HistogramLogBin& rbin, double mesh_dx,
+vector<double> LandeSzalay(GalaxyObjectList& data, GalaxyObjectList& randoms,
+			   const HistogramLogBin& rbin, const double mesh_dx,
 			   vector<double>& DD, vector<double>& DR,
-			   vector<double>& RD, vector<double>& RR);
+			   vector<double>& RD, vector<double>& RR,
+			   vector<double>& mean_r,
+			   bool isAutoCorr=false);
 
 
 

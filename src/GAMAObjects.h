@@ -51,6 +51,8 @@ class GAMAObject : public GalaxyObject {
 
   // constructor, reads a line
   GAMAObject(const string buffer);
+  // simple constructor, covers only the basics
+  GAMAObject(double _ra, double _dec, double _redshift) : GalaxyObject(_ra, _dec, _redshift) {}
   // destructor
   ~GAMAObject() {}
 

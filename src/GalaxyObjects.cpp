@@ -140,7 +140,7 @@ GalaxyObjectList::setComovingCoords(Cosmology c) {
 
 
 vector<GalaxyObject*> 
-GalaxyObjectList::getVectorForm() {
+GalaxyObjectList::getVectorForm() const {
 
   vector<GalaxyObject*> vectorform;
   vectorform.reserve(objPtrList.size());
@@ -193,18 +193,19 @@ GalaxyObjectList::getXYZMinMax(double& xmin, double& xmax,
 //
 void
 _accumulatePairCounts (std::multimap<int,double> nbr_index,
-		      const HistogramLogBin& rbin, vector<double>& hist){
+		       const HistogramLogBin& rbin, vector<double>& hist,
+		       vector<double>& mean_r){
 
-    for (std::multimap<int,double>::iterator ii=nbr_index.begin(); ii!=nbr_index.end(); ii++) {
-      if ((*ii).second < rbin.rsq(0)) continue;
-      for (int i=0; i<rbin.size(); ++i) {
-	if ((*ii).second < rbin.rsq(i+1)) {
-	  ++hist[i];
-	  break;
-	}
+  for (std::multimap<int,double>::iterator ii=nbr_index.begin(); ii!=nbr_index.end(); ii++) {
+    if ((*ii).second < rbin.rsq(0)) continue;
+    for (int i=0; i<rbin.size(); ++i) {
+      if ((*ii).second < rbin.rsq(i+1)) {
+	++hist[i];
+	mean_r[i] += sqrt(ii->second);
+	break;
       }
     }
-
+  }
   return;
 }
 
@@ -219,7 +220,8 @@ _accumulatePairCounts (std::multimap<int,double> nbr_index,
 //
 vector<double>
 _calculateCorrelation(const HistogramLogBin& rbin,
-		      vector<GalaxyObject*> obj_list, Mesh<GalaxyObject*> obj_mesh) {
+		      vector<GalaxyObject*> obj_list, Mesh<GalaxyObject*> obj_mesh,
+		      vector<double>& mean_r) {
 
   vector<double> corr(rbin.size(), 0.);  // initialize return value
 
@@ -235,7 +237,11 @@ _calculateCorrelation(const HistogramLogBin& rbin,
 							      rbin.getRangeMax(),
 							      rbin.getRangeMin());
     // accumulate pair counts into corr[]
-    _accumulatePairCounts(nbr_index, rbin, corr);
+    _accumulatePairCounts(nbr_index, rbin, corr, mean_r);
+  }
+  // calculate the mean_r
+  for (int i = 0; i < rbin.size(); ++i) {
+    mean_r[i] = mean_r[i] / corr[i];
   }
 
   // normalize to the mean average density
@@ -252,35 +258,47 @@ _calculateCorrelation(const HistogramLogBin& rbin,
 
 
 vector<double>
-LandeSzalay(GalaxyObjectList data, GalaxyObjectList random,
-	    const HistogramLogBin& rbin, double mesh_dx,
-	    vector<double>& DD, vector<double>& DR, vector<double>& RD, vector<double>& RR) {
+LandeSzalay(GalaxyObjectList& data, GalaxyObjectList& random,
+	    const HistogramLogBin& rbin, const double mesh_dx,
+	    vector<double>& DD, vector<double>& DR, vector<double>& RD, vector<double>& RR,
+	    vector<double>& mean_r, bool isAutoCorr) {
 
   // prepare inputs
   bool periodic = false;
   vector<GalaxyObject*> data_vector = data.getVectorForm();
   vector<GalaxyObject*> random_vector = random.getVectorForm();
-  cerr << "data size: "  << data.size() << endl;
-  cerr << "random size: "  << random.size() << endl;
+  cerr << "data size: "  << data.size() << endl;  // DEBUG REMOVE
+  cerr << "random size: "  << random.size() << endl;  // DEBUG REMOVE
   // use a common mesh with the same dimension
   double xmin, xmax, ymin, ymax, zmin, zmax;
   bool addEpsilon = true;
   random.getXYZMinMax(xmin, xmax, ymin, ymax, zmin, zmax, addEpsilon); // randoms are denser
-  cerr << xmin << " " << xmax << " "
+  cerr << xmin << " " << xmax << " "    // DEBUG REMOVE
        << ymin << " " << ymax << " "
        << zmin << " " << zmax << endl;
-  cerr << "dx=dy=dz: " << mesh_dx << endl;
+  cerr << "dx=dy=dz: " << mesh_dx << endl;   // DEBUG REMOVE
+  cerr << "creating data_mesh" << endl;  // DEBUG REMOVE
   Mesh<GalaxyObject*, double> data_mesh(mesh_dx, mesh_dx, mesh_dx, data_vector, periodic,
 					xmin, xmax, ymin, ymax, zmin, zmax);
+  cerr << "creating random_mesh" << endl;  // DEBUG REMOVE
   Mesh<GalaxyObject*, double> random_mesh(mesh_dx, mesh_dx, mesh_dx, random_vector, periodic,
 					  xmin, xmax, ymin, ymax, zmin, zmax);
 
   // prepare output
   vector<double> xi(rbin.size());
-  DD = _calculateCorrelation(rbin, data_vector, data_mesh);
-  DR = _calculateCorrelation(rbin, data_vector, random_mesh);
-  RD = _calculateCorrelation(rbin, random_vector, data_mesh);
-  RR = _calculateCorrelation(rbin, random_vector, random_mesh);
+  mean_r.resize(rbin.size(), 0.);  // initialize mean_r
+  cerr << "calculating DD" << endl;  // DEBUG REMOVE
+  DD = _calculateCorrelation(rbin, data_vector, data_mesh, mean_r);
+  vector<double> junk;
+  cerr << "calculating DR" << endl;  // DEBUG REMOVE
+  DR = _calculateCorrelation(rbin, data_vector, random_mesh, junk);
+  cerr << "calculating RD" << endl;  // DEBUG REMOVE
+  if (isAutoCorr)
+    RD = DR;
+  else
+    RD = _calculateCorrelation(rbin, random_vector, data_mesh, junk);
+  cerr << "calculating RR" << endl;  // DEBUG REMOVE
+  RR = _calculateCorrelation(rbin, random_vector, random_mesh, junk);
 
   // calculate the Lande-Szalay estimator
   for (int i = 0; i < rbin.size(); ++i) {
