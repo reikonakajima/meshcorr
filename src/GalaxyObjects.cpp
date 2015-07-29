@@ -290,6 +290,7 @@ LandeSzalay(GalaxyObjectList& data, GalaxyObjectList& random,
   cerr << "calculating DD" << endl;  // DEBUG REMOVE
   DD = _calculateCorrelation(rbin, data_vector, data_mesh, mean_r);
   vector<double> junk;
+  junk.resize(rbin.size(), 0.);  // initialize junk
   cerr << "calculating DR" << endl;  // DEBUG REMOVE
   DR = _calculateCorrelation(rbin, data_vector, random_mesh, junk);
   cerr << "calculating RD" << endl;  // DEBUG REMOVE

@@ -16,6 +16,7 @@ using std::ostringstream;
 using std::setw;
 using std::setfill;
 using std::fixed;
+using std::scientific;
 using std::setprecision;
 
 
@@ -96,6 +97,7 @@ main(int argc, char* argv[]) {
 
 
     int nbin = 40;
+    nbin = 5;  // DEBUG
     double minr = 0.1 , maxr = 200., dx_mesh = 20.;  // Mpc/h
     HistogramLogBin rbin(minr,maxr,nbin);
     vector<double> DD, DR, RD, RR, mean_r;
@@ -106,22 +108,26 @@ main(int argc, char* argv[]) {
     // save to output file
     string out_filename = gama_fits_filename+".xi.out";
     ofstream outf(out_filename.c_str());
-    outf << "#i   rmin[i]  rmax[i]  mean_r[i]  DD   DR   RD   RR   xi[i]" << endl;
+    outf << "#i   rmin[i]  rmax[i]  mean_r[i]       DD             DR             RD             RR             xi[i]" << endl;
     for (int i = 0; i < rbin.size(); ++i) {
       // DEBUG OUTPUT
       outf << fixed << setw(3)
 	   << i << "  "
 	   << fixed << setw(8) << setprecision(4)
-	   << rbin[i] << " " << rbin[i+1] << "  " << mean_r[i] << "  "
-	   << setw(14) << setprecision(0)
+	   << rbin[i] << " "
+	   << fixed << setw(8) << setprecision(4)
+	   << rbin[i+1] << "  "
+	   << fixed << setw(8) << setprecision(4)
+	   << mean_r[i] << "  "
+	   << setw(14) << setprecision(6) << scientific
 	   << DD[i] << " "
-	   << setw(14) << setprecision(0)
+	   << setw(14) << setprecision(6)
 	   << DR[i] << " "
-	   << setw(14) << setprecision(0)
+	   << setw(14) << setprecision(6)
 	   << RD[i] << " "
-	   << setw(14) << setprecision(0)
+	   << setw(14) << setprecision(6)
 	   << RR[i] << " "
-	   << setw(14) << setprecision(0)
+	   << setw(14) << setprecision(6)
 	   << xi[i] << endl;
     }
 
