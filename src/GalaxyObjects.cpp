@@ -276,35 +276,35 @@ LandeSzalay(GalaxyObjectList& data, GalaxyObjectList& random,
   cerr << xmin << " " << xmax << " "    // DEBUG REMOVE
        << ymin << " " << ymax << " "
        << zmin << " " << zmax << endl;
-  cerr << "dx=dy=dz: " << mesh_dx << endl;   // DEBUG REMOVE
-  cerr << "creating data_mesh" << endl;  // DEBUG REMOVE
+  cerr << "creating data_mesh... ";
   Mesh<GalaxyObject*, double> data_mesh(mesh_dx, mesh_dx, mesh_dx, data_vector, periodic,
 					xmin, xmax, ymin, ymax, zmin, zmax);
-  cerr << "creating random_mesh" << endl;  // DEBUG REMOVE
+  cerr << "random_mesh... " << endl;
   Mesh<GalaxyObject*, double> random_mesh(mesh_dx, mesh_dx, mesh_dx, random_vector, periodic,
 					  xmin, xmax, ymin, ymax, zmin, zmax);
 
   // prepare output
   vector<double> xi(rbin.size());
   mean_r.resize(rbin.size(), 0.);  // initialize mean_r
-  cerr << "calculating DD" << endl;  // DEBUG REMOVE
+  cerr << "calculating DD... ";
   DD = _calculateCorrelation(rbin, data_vector, data_mesh, mean_r);
   vector<double> junk;
   junk.resize(rbin.size(), 0.);  // initialize junk
-  cerr << "calculating DR" << endl;  // DEBUG REMOVE
+  cerr << "DR... ";
   DR = _calculateCorrelation(rbin, data_vector, random_mesh, junk);
-  cerr << "calculating RD" << endl;  // DEBUG REMOVE
-  if (isAutoCorr)
+  if (isAutoCorr) {
     RD = DR;
-  else
+  } else {
+    cerr << "RD... ";
     RD = _calculateCorrelation(rbin, random_vector, data_mesh, junk);
-  cerr << "calculating RR" << endl;  // DEBUG REMOVE
+  }
+  cerr << "RR... ";
   RR = _calculateCorrelation(rbin, random_vector, random_mesh, junk);
 
   // calculate the Lande-Szalay estimator
   for (int i = 0; i < rbin.size(); ++i) {
     xi[i] = (DD[i] - DR[i] - RD[i]) / RR[i] + 1.;
   }  
-
+  cerr << endl;
   return xi;
 }

@@ -108,7 +108,7 @@ main(int argc, char* argv[]) {
     // save to output file
     string out_filename = gama_fits_filename+".xi.out";
     ofstream outf(out_filename.c_str());
-    outf << "#i   rmin[i]  rmax[i]  mean_r[i]       DD             DR             RD             RR             xi[i]" << endl;
+    outf << "#i    rmin[i]  rmax[i]  mean_r[i]       DD             DR             RD             RR             xi[i]" << endl;
     for (int i = 0; i < rbin.size(); ++i) {
       // DEBUG OUTPUT
       outf << fixed << setw(3)
@@ -116,7 +116,7 @@ main(int argc, char* argv[]) {
 	   << fixed << setw(8) << setprecision(4)
 	   << rbin[i] << " "
 	   << fixed << setw(8) << setprecision(4)
-	   << rbin[i+1] << "  "
+	   << rbin[i+1] << "   "
 	   << fixed << setw(8) << setprecision(4)
 	   << mean_r[i] << "  "
 	   << setw(14) << setprecision(6) << scientific
