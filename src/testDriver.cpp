@@ -97,8 +97,7 @@ main(int argc, char* argv[]) {
 
 
     int nbin = 40;
-    nbin = 5;  // DEBUG
-    double minr = 0.1 , maxr = 200., dx_mesh = 20.;  // Mpc/h
+    double minr = 0.1 , maxr = 100., dx_mesh = 20.;  // Mpc/h
     HistogramLogBin rbin(minr,maxr,nbin);
     vector<double> DD, DR, RD, RR, mean_r;
     bool isAutoCorr = true;
@@ -110,7 +109,7 @@ main(int argc, char* argv[]) {
     ofstream outf(out_filename.c_str());
     outf << "#i    rmin[i]  rmax[i]  mean_r[i]       DD             DR             RD             RR             xi[i]" << endl;
     for (int i = 0; i < rbin.size(); ++i) {
-      // DEBUG OUTPUT
+      // OUTPUT
       outf << fixed << setw(3)
 	   << i << "  "
 	   << fixed << setw(8) << setprecision(4)
