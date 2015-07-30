@@ -59,8 +59,9 @@ sub_objects = '''
 # build the main programs
 
 test = env.Program(target='mesh_test', source=sub_objects+['src/testDriver.cpp',])
+smbin = env.Program(target='gama_smass_bin_3dcorr', source=sub_objects+['src/gama_smass_bin_3dcorr.cpp',])
 #starhalo = env.Program(target='gglens_starhalo', source=sub_objects+['src/gglens_starhalo.cpp',])
-env.Install('bin', [test,])
+env.Install('bin', [test, smbin])
 #env.Alias('install', 'bin')
 
 # (eventually, build a library code)

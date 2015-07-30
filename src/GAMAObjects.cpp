@@ -53,9 +53,8 @@ GAMAObjectList::_readFITSFile(const string fits_filename)
 {
   // FITS file pointer
   auto_ptr<CCfits::FITS> pInfile(0);
-  pInfile.reset(new CCfits::FITS(fits_filename, CCfits::Read));
+
   // open the fits table and go to the right extension
-  /*
   try {
     pInfile.reset(new CCfits::FITS(fits_filename, CCfits::Read));
   } catch(MyException& m) {
@@ -86,7 +85,6 @@ GAMAObjectList::_readFITSFile(const string fits_filename)
 
   for (long i=0; i<n_row; ++i)
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(ra[i], dec[i], redshift[i]));
-  */
 }
 
 

@@ -24,8 +24,7 @@ const string usage =
   "\n"
   "testDriver: calculate tangential shear around a point (galaxy-galaxy lensing signal)\n"
   "\n"
-  " usage: testDriver <GAMA_FITS_catalog> <random_FITS_catalog>\n"
-  "  GAMA_catalog:  lens catalog\n"
+  " usage: testDriver <smass_bin_name> <min_log10_smass> <max_log10_smass>\n"
   "  \n"
   //  " output #1: file name:\" "+outfprefix+suffix+"\"\n"
   " stdin:  (none)\n"
@@ -45,24 +44,33 @@ main(int argc, char* argv[]) {
       exit(2);
     }
 
-    const string data_dir = argv[1];
+    int i_arg = 0;
+    const string smass_bin_name = argv[++i_arg];
+    const float min_log10_smass = atof(argv[++i_arg]);
+    const float max_log10_smass = atof(argv[++i_arg]);
 
-    /// read in the 3 gama files (only runs on the Bonn Euclid machines)
-    string gama_fits_filename[3];
+    /// read in the 3 gama files (file specific to the Bonn Euclid machines)
+    vector<string> gama_fits_filename(3);
     gama_fits_filename[0] = "~/1project/galbias/wp/data_lens_3d/G09_3d.fits";
     gama_fits_filename[1] = "~/1project/galbias/wp/data_lens_3d/G12_3d.fits";
     gama_fits_filename[2] = "~/1project/galbias/wp/data_lens_3d/G15_3d.fits";
-
     GAMAObjectList gama_list;
+    for (int i=0; i<gama_fits_filename.size(); ++i) {
+      gama_list.read(gama_fits_filename[i]);
+    }
     cerr << "GAMA data read" << endl;
 
 
     /// read in the 3 random file
-    const string random_fits_filename = argv[++i_arg];
-    ifstream randomf(random_fits_filename.c_str());
-    if (!randomf)
-      throw MyException("Random catalog file " + random_fits_filename + " not found");
-    GAMAObjectList master_random_list(random_fits_filename);
+    vector<string> random_fits_filename(3);
+    random_fits_filename[0] = "~/1project/galbias/wp/rand_30x/G09.rand.fits";
+    random_fits_filename[1] = "~/1project/galbias/wp/rand_30x/G12.rand.fits";
+    random_fits_filename[2] = "~/1project/galbias/wp/rand_30x/G15.rand.fits";
+
+    GAMAObjectList master_random_list;
+    for (int i=0; i<random_fits_filename.size(); ++i) {
+      master_random_list.read(random_fits_filename[i]);
+    }
     cerr << "master random data read ";
     int decimate_factor = 5;
     GalaxyObjectList random_list = master_random_list.cull(decimate_factor);
@@ -73,10 +81,14 @@ main(int argc, char* argv[]) {
     // diagnostic error messages
     //
     cerr << "=== testDriver ===" << endl;
-    cerr << "GAMA catalog ...... " << argv[1] << endl;
+    for (int i=0; i<gama_fits_filename.size(); ++i) {
+      cerr << "GAMA catalog ...... " << gama_fits_filename[i] << endl;
+    }
     cerr << "     count ........ " << gama_list.size() << endl;
     cerr << "     bounds ....... " << gama_list.getBounds() << endl;
-    cerr << "Random catalog .... " << argv[2] << endl;
+    for (int i=0; i<random_fits_filename.size(); ++i) {
+      cerr << "Random catalog .... " << random_fits_filename[i] << endl;
+    }
     cerr << "     count ........ " << random_list.size() << endl;
     cerr << "     bounds ....... " << random_list.getBounds() << endl;
 
@@ -112,7 +124,7 @@ main(int argc, char* argv[]) {
 				    DD, DR, RD, RR, mean_r, isAutoCorr);
 
     // save to output file
-    string out_filename = gama_fits_filename+".xi.out";
+    string out_filename = smass_bin_name+".xi.out";
     ofstream outf(out_filename.c_str());
     outf << "#i    rmin[i]  rmax[i]  mean_r[i]       DD             DR             RD             RR             xi[i]" << endl;
     for (int i = 0; i < rbin.size(); ++i) {
