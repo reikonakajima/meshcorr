@@ -46,13 +46,16 @@ GAMAObjectList::GAMAObjectList(istream& is)
 
 
 //
-// GAMAObjectList() : constructor for FITS file input
+// _readFITSFile() : read in FITS file
 //
-GAMAObjectList::GAMAObjectList(const string fits_filename)
+void
+GAMAObjectList::_readFITSFile(const string fits_filename)
 {
+  // FITS file pointer
   auto_ptr<CCfits::FITS> pInfile(0);
-
+  pInfile.reset(new CCfits::FITS(fits_filename, CCfits::Read));
   // open the fits table and go to the right extension
+  /*
   try {
     pInfile.reset(new CCfits::FITS(fits_filename, CCfits::Read));
   } catch(MyException& m) {
@@ -83,11 +86,18 @@ GAMAObjectList::GAMAObjectList(const string fits_filename)
 
   for (long i=0; i<n_row; ++i)
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(ra[i], dec[i], redshift[i]));
-
-  return;
+  */
 }
 
 
+//
+// GAMAObjectList() : constructor for FITS file input
+//
+GAMAObjectList::GAMAObjectList(const string fits_filename)
+{
+  _readFITSFile(fits_filename);
+  return;
+}
 
 
 
@@ -100,6 +110,17 @@ GAMAObjectList::read(istream& is)
   string buffer;
   while (getlineNoComment(is, buffer)) 
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(buffer));
+  return (GalaxyObjectList::objPtrList.size() - size_before);
+}
+
+
+int
+GAMAObjectList::read(const string fits_filename)
+{
+  resetBounds();  // old ra/dec bounds is invalid
+
+  int size_before = GalaxyObjectList::objPtrList.size();
+  _readFITSFile(fits_filename);
   return (GalaxyObjectList::objPtrList.size() - size_before);
 }
 

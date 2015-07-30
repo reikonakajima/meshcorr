@@ -111,11 +111,12 @@ class GAMAObjectList : public GalaxyObjectList {
   GAMAObjectList() {};
   // constructor, reads input stream (assumes ASCII (Edo's) file)
   GAMAObjectList(istream& is);
-  // constructor, read FITS file input
+  // constructor, read FITS file input  (currently only read ra/dec/z)
   GAMAObjectList(const string fits_filename);
 
-  // read istream (returns size of read list)
-  int read(istream& is);
+  // read istream or FITS file.  returns size of newly read objects
+  int read(istream& is);                 // Edo's ASCII file
+  int read(const string fits_filename);  // FITS file
 
   // get a subsample in redshift bins
   GAMAObjectList getZBinSubsample(double zmin, double zmax) const ;
@@ -124,6 +125,8 @@ class GAMAObjectList : public GalaxyObjectList {
   // sort by GAMA ID for matching purposes
   void sortByGAMAId();
 
+ private:
+  void _readFITSFile(const string fits_filename);
 };
 
 
