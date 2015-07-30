@@ -72,7 +72,7 @@ main(int argc, char* argv[]) {
       master_random_list.read(random_fits_filename[i]);
     }
     cerr << "master random data read ";
-    int decimate_factor = 5;
+    int decimate_factor = 10;
     GalaxyObjectList random_list = master_random_list.cull(decimate_factor);
     cerr << "and culled" << endl;
 
