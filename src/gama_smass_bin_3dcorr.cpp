@@ -109,6 +109,9 @@ main(int argc, char* argv[]) {
     double Omega_m = 0.27;
     double Omega_lambda = 1. - Omega_m;
     Cosmology cosmo(Omega_m, Omega_lambda);
+    cerr << " Cosmology ........ " << endl;
+    cerr << "   Omega_m ........ " << Omega_m << endl;
+    cerr << "   Omega_lambda.... " << Omega_lambda << endl << endl;
     cerr << "calculating comoving coordinates for data" << endl;
     gama_list.setComovingCoords(cosmo);
     cerr << "calculating comoving coordinates for randoms" << endl;
