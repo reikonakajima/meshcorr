@@ -72,7 +72,7 @@ main(int argc, char* argv[]) {
       master_random_list.read(random_fits_filename[i]);
     }
     cerr << "master random data read ";
-    int decimate_factor = 10;
+    int decimate_factor = 8;
     GalaxyObjectList random_list = master_random_list.cull(decimate_factor);
     cerr << "and culled" << endl;
 
@@ -117,7 +117,7 @@ main(int argc, char* argv[]) {
 
 
     int nbin = 40;
-    double minr = 0.1 , maxr = 100., dx_mesh = 20.;  // Mpc/h
+    double minr = 0.5 , maxr = 100., dx_mesh = 20.;  // Mpc/h
     HistogramLogBin rbin(minr,maxr,nbin);
     vector<double> DD, DR, RD, RR, mean_r;
     bool isAutoCorr = true;
