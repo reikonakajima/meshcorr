@@ -108,11 +108,11 @@ class GalaxyObjectList {
  private:
   Bounds<double> bounds;
   list<GalaxyObject*>::iterator searchRA(list<GalaxyObject*>::iterator first, 
-				    list<GalaxyObject*>::iterator last,
-				    const double ra);
+					 list<GalaxyObject*>::iterator last,
+					 const double ra);
   list<GalaxyObject*>::iterator searchDec(list<GalaxyObject*>::iterator first, 
-				     list<GalaxyObject*>::iterator last,
-				     const double dec);
+					  list<GalaxyObject*>::iterator last,
+					  const double dec);
 
 };
 

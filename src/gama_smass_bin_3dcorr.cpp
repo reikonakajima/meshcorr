@@ -39,7 +39,7 @@ main(int argc, char* argv[]) {
     //
     // process arguments
     //
-    if (argc < 2) {
+    if (argc < 4) {
       cerr << usage;
       exit(2);
     }
@@ -54,12 +54,12 @@ main(int argc, char* argv[]) {
     gama_fits_filename[0] = "~/1project/galbias/wp/data_lens_3d/G09_3d.fits";
     gama_fits_filename[1] = "~/1project/galbias/wp/data_lens_3d/G12_3d.fits";
     gama_fits_filename[2] = "~/1project/galbias/wp/data_lens_3d/G15_3d.fits";
-    GAMAObjectList gama_list;
+    GAMAObjectList master_gama_list;
     for (int i=0; i<gama_fits_filename.size(); ++i) {
-      gama_list.read(gama_fits_filename[i]);
+      master_gama_list.read(gama_fits_filename[i]);
     }
     cerr << "GAMA data read" << endl;
-
+    GAMAObjectList gama_list = master_gama_list.cullByLogMStar(min_log10_smass, max_log10_smass);
 
     /// read in the 3 random file
     vector<string> random_fits_filename(3);
@@ -101,6 +101,7 @@ main(int argc, char* argv[]) {
       cerr << "no random objects, exiting" << endl;
       return(9);
     }
+
 
     //
     // set XYZ accoring to cosmology

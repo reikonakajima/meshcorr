@@ -52,7 +52,8 @@ class GAMAObject : public GalaxyObject {
   // constructor, reads a line
   GAMAObject(const string buffer);
   // simple constructor, covers only the basics
-  GAMAObject(double _ra, double _dec, double _redshift) : GalaxyObject(_ra, _dec, _redshift) {}
+  GAMAObject(double _ra, double _dec, double _redshift, float absmagr=0, float logmstar=0) :
+  GalaxyObject(_ra, _dec, _redshift), absMagR(absmagr), logMStar(logmstar) {}
   // destructor
   ~GAMAObject() {}
 
@@ -68,6 +69,9 @@ class GAMAObject : public GalaxyObject {
   float getMetalErr() const { return metalErr; }
   int   getRankBCG() const { return rankBCG; }   // CHECK !!!
   int   getNFOF() const { return nFOF; }   // CHECK !!!
+
+  void setAbsMagR(float amr) { absMagR = amr; return; }
+  void setLogMStar(float ms) { logMStar = ms; return; }
 
  private:
 
@@ -118,6 +122,8 @@ class GAMAObjectList : public GalaxyObjectList {
   int read(istream& is);                 // Edo's ASCII file
   int read(const string fits_filename);  // FITS file
 
+  // get a subsample in log10 stellar mass
+  GAMAObjectList cullByLogMStar(float min_log10_mstar, float max_log10_mstar) const;
   // get a subsample in redshift bins
   GAMAObjectList getZBinSubsample(double zmin, double zmax) const ;
   // sort by spectroscopic redshifts

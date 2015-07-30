@@ -83,8 +83,27 @@ GAMAObjectList::_readFITSFile(const string fits_filename)
     throw MyException(fitsError.message());
   }
 
-  for (long i=0; i<n_row; ++i)
+  // things that the random catalog doesn't have...
+  std::vector <double> logmstar;
+  std::vector <double> absmag_r;
+  try {
+    table.column("ABSMAG_R").read(absmag_r, 0, n_row-1);
+    table.column("LOGMSTAR").read(logmstar, 0, n_row-1);
+    // add on to the object pointer list if these exist, and return  (TEMPORARY HACK)
+    for (long i=0; i<n_row; ++i) {
+      GalaxyObjectList::objPtrList.push_back(new GAMAObject(ra[i], dec[i], redshift[i],
+							    absmag_r[i], logmstar[i]));
+    }
+    return;
+  } catch (CCfits::Table::NoSuchColumn &fitsError) {
+    cerr << fitsError.message() << endl;
+  }
+
+  // no auxilary columns found, push_back each item and return
+  for (long i=0; i<n_row; ++i) {
     GalaxyObjectList::objPtrList.push_back(new GAMAObject(ra[i], dec[i], redshift[i]));
+  }
+
 }
 
 
@@ -135,6 +154,26 @@ GAMAObjectList::sortByGAMAId() {
   return;
 
 }
+
+
+//
+// cullByLogMStar() : get a subsample in log10 stellar mass
+//
+GAMAObjectList
+GAMAObjectList::cullByLogMStar(float min_log10_mstar, float max_log10_mstar) const {
+
+  GAMAObjectList subsample;
+
+  list<GalaxyObject*>::const_iterator i = GalaxyObjectList::objPtrList.begin();
+  for (; i != GalaxyObjectList::objPtrList.end(); ++i) {
+    GAMAObject* gama_ptr = static_cast<GAMAObject*>(*i);
+    float logmstar = gama_ptr->getLogMStar();
+    if (logmstar >= min_log10_mstar && logmstar < max_log10_mstar)
+      subsample.GalaxyObjectList::objPtrList.push_back(*i);
+  }
+  return subsample;
+}
+
 
 
 //
