@@ -106,8 +106,8 @@ main(int argc, char* argv[]) {
     //
     // set XYZ accoring to cosmology
     //
-    double Omega_m = 0.73;
-    double Omega_lambda = 0.27;
+    double Omega_m = 0.27;
+    double Omega_lambda = 1. - Omega_m;
     Cosmology cosmo(Omega_m, Omega_lambda);
     cerr << "calculating comoving coordinates for data" << endl;
     gama_list.setComovingCoords(cosmo);
